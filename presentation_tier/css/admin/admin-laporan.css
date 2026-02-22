@@ -1,0 +1,152 @@
+/* public/presentation_tier/css/admin-laporan.css */
+
+.report-page {
+    padding: 30px;
+}
+.report-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f4f4f4;
+}
+.report-header h2 {
+    margin: 0;
+    color: #333;
+}
+.filter-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.filter-group label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #555;
+}
+.filter-group input[type="date"],
+.filter-group select {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    
+    /* Menghilangkan tampilan default browser untuk select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23555' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center; /* Posisi panah di kanan */
+    background-size: 12px; /* Ukuran panah */
+    padding-right: 30px; /* Jarak agar teks tidak menimpa panah */
+}
+
+/* Opsional: Gaya fokus untuk konsistensi */
+.filter-group input[type="date"]:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: #007bff; /* Warna border saat fokus */
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25); /* Efek glow saat fokus */
+}
+.filter-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+.btn-success:hover {
+    background-color: #218838;
+}
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+.report-table th, .report-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+.report-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    color: #444;
+}
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.report-table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+.status-selesai { background-color: #e4f8f0; color: #28a745; }
+.status-diproses { background-color: #fff8e1; color: #ff9800; }
+.status-ditolak { background-color: #fde2e4; color: #dc3545; }
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+}
+/* Tambahkan di file public/presentation_tier/css/admin-laporan.css */
+
+/* Update styling untuk header laporan - mirip dengan page-header */
+.report-header {
+    background: white;
+    padding: 35px 40px;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    border-left: 4px solid #1e3a8a;
+}
+
+.report-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+}
+
+.report-header p {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+}

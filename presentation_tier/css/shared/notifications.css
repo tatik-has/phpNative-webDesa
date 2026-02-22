@@ -1,0 +1,544 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Saran: Agar efek 'backdrop-filter: blur(10px)' berfungsi, 
+   pastikan <body> Anda memiliki background-image. Contoh:
+*/
+/*
+body {
+    background-image: linear-gradient(to top right, #3a1c71, #d76d77, #ffaf7b);
+    background-size: cover;
+    min-height: 100vh;
+}
+*/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Container Utama */
+.notif-container {
+    max-width: 800px;
+    margin: 120px auto;
+    padding: 30px;
+    font-family: 'Poppins', sans-serif;
+    /* Menambahkan sedikit efek kaca pada container utamanya */
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notif-header h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.25rem;
+    font-weight: 700;
+    /* Menambahkan shadow agar teks lebih "pop" */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Daftar Notifikasi */
+.notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Kartu Notifikasi Utama */
+.notif-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #f0f0f0; /* Sedikit diredupkan agar tidak terlalu silau */
+    backdrop-filter: blur(10px);
+    /* Menambahkan shadow untuk efek terangkat */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    /* Memperhalus transisi untuk hover */
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notif-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    /* Efek "terangkat" saat di-hover */
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Ikon di sebelah kiri (Dibuat lebih menonjol) */
+.notif-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 217, 255, 0.1); /* Background glow sesuai warna ikon */
+    border-radius: 50%; /* Membuatnya bulat */
+    border: 1px solid rgba(0, 217, 255, 0.5);
+}
+
+.notif-icon i {
+    font-size: 1.75rem; /* Disesuaikan agar pas di lingkaran */
+    color: #00d9ff;
+    /* Efek neon/glow pada ikon */
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.7);
+}
+
+/* Konten teks di tengah */
+.notif-content {
+    flex-grow: 1;
+}
+
+.notif-content .message {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600; /* Ditebalkan agar lebih jelas */
+    line-height: 1.4;
+}
+
+.notif-content .time {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7); /* Dibuat lebih transparan */
+    margin-top: 5px;
+    display: block;
+}
+
+/* Pesan jika tidak ada notifikasi */
+.no-notif {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =======================================================
+  BAGIAN YANG DISESUAIKAN ADA DI BAWAH INI
+======================================================= */
+
+/* ==============================
+    TAMBAHAN UNTUK TOMBOL HAPUS
+============================== */
+
+.btn-delete {
+    background-color: #dc3545; /* warna merah khas delete */
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-delete i {
+    font-size: 14px;
+}
+
+.btn-delete:hover {
+    background-color: #bb2d3b;
+    transform: scale(1.05);
+}
+
+.btn-delete:active {
+    background-color: #a52834;
+    transform: scale(0.97);
+}
+
+/* Tata letak tombol aksi notifikasi */
+.notif-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* === PERUBAHAN 1: Tombol Unduh disamakan === */
+.notif-action .btn-download {
+    background-color: #198754;
+    color: #fff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+
+    /* PROPERTI TAMBAHAN: Agar sama besar dengan tombol Hapus */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px; 
+}
+
+.notif-action .btn-download:hover {
+    background-color: #157347;
+    transform: scale(1.05);
+}
+
+/* === PERUBAHAN 2: Tombol Hapus Semua dipindahkan === */
+.btn-delete-all {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    /* PROPERTI TAMBAHAN: Untuk pindah ke kanan dan memberi jarak */
+    margin-left: auto;
+    margin-bottom: 20px;
+}
+
+.btn-delete-all:hover {
+    background-color: #b91c1c;
+}
+
+.btn-delete-all i {
+    font-size: 0.875rem;
+}
+/* === RESPONSIVE DESIGN === */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .notif-container {
+        margin: 100px auto;
+        padding: 25px;
+        max-width: 720px;
+    }
+    
+    .notif-header h1 {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+    
+    .btn-delete-all {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .notif-item {
+        padding: 18px;
+        gap: 18px;
+    }
+    
+    .notif-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .notif-icon i {
+        font-size: 1.6rem;
+    }
+}
+
+/* Mobile Large (577px - 767px) */
+@media (max-width: 767px) {
+    .notif-container {
+        margin: 100px 20px;
+        padding: 20px;
+        border-radius: 14px;
+    }
+    
+    .notif-header {
+        margin-bottom: 20px;
+    }
+    
+    .notif-header h1 {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+    }
+    
+    .btn-delete-all {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-bottom: 18px;
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+    
+    .notif-list {
+        gap: 12px;
+    }
+    
+    .notif-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 15px;
+    }
+    
+    .notif-item:hover {
+        transform: translateY(-3px);
+    }
+    
+    /* Icon dan Content dalam satu baris */
+    .notif-item-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+    }
+    
+    .notif-icon {
+        width: 45px;
+        height: 45px;
+        flex-shrink: 0;
+    }
+    
+    .notif-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .notif-content {
+        flex: 1;
+    }
+    
+    .notif-content .message {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .notif-content .time {
+        font-size: 0.8rem;
+        margin-top: 4px;
+    }
+    
+    /* Action buttons full width */
+    .notif-action {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    
+    .notif-action form {
+        flex: 1;
+    }
+    
+    .btn-delete,
+    .notif-action .btn-download {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 0.875rem;
+    }
+    
+    .no-notif {
+        padding: 25px;
+        font-size: 0.95rem;
+    }
+    
+    .no-notif i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: block;
+    }
+}
+
+/* Mobile Small (max 576px) */
+@media (max-width: 576px) {
+    .notif-container {
+        margin: 90px 16px;
+        padding: 18px;
+        border-radius: 12px;
+    }
+    
+    .notif-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 18px;
+    }
+    
+    .btn-delete-all {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .btn-delete-all i {
+        font-size: 0.8rem;
+    }
+    
+    .notif-list {
+        gap: 10px;
+    }
+    
+    .notif-item {
+        padding: 14px;
+        gap: 12px;
+        border-radius: 10px;
+    }
+    
+    .notif-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .notif-icon i {
+        font-size: 1.3rem;
+    }
+    
+    .notif-content .message {
+        font-size: 0.9rem;
+        line-height: 1.45;
+    }
+    
+    .notif-content .time {
+        font-size: 0.75rem;
+    }
+    
+    .btn-delete,
+    .notif-action .btn-download {
+        padding: 9px 14px;
+        font-size: 0.8rem;
+    }
+    
+    .btn-delete i,
+    .notif-action .btn-download i {
+        font-size: 0.75rem;
+    }
+    
+    .no-notif {
+        padding: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .no-notif i {
+        font-size: 2rem;
+    }
+}
+
+/* Mobile Extra Small (max 375px) */
+@media (max-width: 375px) {
+    .notif-container {
+        margin: 80px 12px;
+        padding: 16px;
+    }
+    
+    .notif-header h1 {
+        font-size: 1.35rem;
+        margin-bottom: 16px;
+    }
+    
+    .btn-delete-all {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8rem;
+    }
+    
+    .notif-item {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .notif-icon {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .notif-icon i {
+        font-size: 1.2rem;
+    }
+    
+    .notif-content .message {
+        font-size: 0.85rem;
+    }
+    
+    .notif-content .time {
+        font-size: 0.7rem;
+    }
+    
+    .btn-delete,
+    .notif-action .btn-download {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Landscape Mode Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .notif-container {
+        margin: 80px auto;
+        padding: 20px;
+    }
+    
+    .notif-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .btn-delete-all {
+        margin-bottom: 15px;
+    }
+    
+    .notif-item {
+        padding: 12px;
+    }
+    
+    .notif-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .no-notif {
+        padding: 20px;
+    }
+}
+
+/* Fix untuk struktur layout mobile yang berbeda */
+@media (max-width: 767px) {
+    /* Wrapper untuk icon dan content agar tetap dalam satu baris */
+    .notif-item > .notif-icon,
+    .notif-item > .notif-content {
+        display: inline-block;
+    }
+    
+    /* Pastikan content tidak meluber */
+    .notif-content .message {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Action buttons styling improvement */
+    .notif-action {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 12px;
+        margin-top: 5px;
+    }
+}
+
+/* Improvement untuk button group di mobile */
+@media (max-width: 767px) {
+    .notif-action {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .notif-action form {
+        flex: 1;
+    }
+    
+    .notif-action .btn-download {
+        flex: 1;
+    }
+    
+    /* Jika ada tombol download, buat 50-50 */
+    .notif-action form + .btn-download {
+        flex: 1;
+    }
+}

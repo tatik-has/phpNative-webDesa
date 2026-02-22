@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(
+        rgba(15, 23, 42, 0.8), 
+        rgba(30, 58, 138, 0.7)
+    ), url('/web-pengajuan/images/image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.pengajuan-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 150px 40px 60px;
+}
+
+.pengajuan-title {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-align: center;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.surat-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.surat-card:hover {
+    transform: translateY(-12px);
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+    box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
+}
+
+.kartu-icon {
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: #fff;
+}
+
+
+.kartu-body {
+    padding: 20px 24px;
+    flex: 1;
+}
+
+.kartu-body h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.kartu-body p {
+    font-size: .9rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+}
+
+.kartu-footer {
+    padding: 14px 24px;
+    background: rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: .9rem;
+    font-weight: 600;
+    color: #38bdf8;
+}
+
+.kartu-footer i {
+    margin-left: 6px;
+    transition: transform .2s;
+}
+
+.surat-card:hover .kartu-footer i { transform: translateX(4px); }
+
+@media (max-width: 767px) {
+    .pengajuan-container { padding: 100px 20px 40px; }
+    .pengajuan-title { font-size: 28px; margin-bottom: 35px; }
+    .card-container { grid-template-columns: 1fr; max-width: 400px; }
+}
+
+@media (max-width: 576px) {
+    .pengajuan-container { padding: 90px 16px 30px; }
+    .pengajuan-title { font-size: 22px; }
+}

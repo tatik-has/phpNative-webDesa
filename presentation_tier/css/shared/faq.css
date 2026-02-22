@@ -1,0 +1,333 @@
+/* File: public/presentation_tier/css/faq.css */
+
+/* Menerapkan box-sizing dan font dasar */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Pastikan background diterapkan di seluruh halaman */
+body {
+    background-color: #f4f7f6; 
+    font-family: 'Inter', sans-serif;
+}
+
+.faq-container {
+    max-width: 800px; /* Sedikit lebih lebar */
+    margin: 120px auto; /* Memberi jarak lebih dari navbar */
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px; /* Rounded corner lebih halus */
+    /* Shadow lebih lembut dan modern dengan warna biru samar */
+    box-shadow: 0 10px 30px rgba(0, 87, 158, 0.08); 
+    border: 1px solid #e9ecef; /* Border tipis untuk kesan rapi */
+}
+
+.faq-container h1 {
+    text-align: center;
+    color: #1a2533; /* Lebih gelap, lebih profesional */
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 2.25rem; /* Sedikit lebih besar */
+}
+
+.faq-container .subtitle {
+    text-align: center;
+    color: #5a697d; /* Abu-abu kebiruan yang lebih lembut */
+    margin-bottom: 45px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e9ecef; /* Warna border yang konsisten */
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 24px 10px; /* Padding lebih banyak agar tidak sempit */
+    font-size: 1.15rem; /* Sedikit lebih besar agar mudah dibaca */
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Transisi agar perubahan warna lebih halus */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.faq-question:hover {
+    background-color: #f8f9fa; /* Efek hover yang sangat halus */
+    color: #0056b3; /* Warna biru saat di-hover */
+}
+
+.faq-question .fa-chevron-down {
+    /* Transisi 'bouncy' agar lebih menarik */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    color: #007bff; /* Biru cerah */
+    font-size: 0.9rem; /* Ikon sedikit lebih kecil */
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    /* Transisi yang lebih 'mengalir' */
+    transition: max-height 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+                padding 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    padding: 0 20px;
+    color: #495057; /* Warna teks jawaban yang nyaman dibaca */
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* Memberi jarak untuk paragraf atau list di dalam jawaban */
+.faq-answer p, .faq-answer ol {
+    margin-bottom: 1rem;
+}
+
+.faq-answer ol {
+    padding-left: 25px;
+}
+
+/* --- KETIKA ITEM FAQ DI-KLIK (AKTIF) --- */
+
+.faq-item.active .faq-question {
+    color: #0056b3; /* Warna teks menjadi biru saat aktif */
+}
+
+.faq-item.active .faq-answer {
+    max-height: 500px; /* Perbanyak ruang untuk jawaban panjang */
+    padding: 10px 20px 30px 20px;
+}
+
+.faq-item.active .faq-question .fa-chevron-down {
+    transform: rotate(180deg);
+    color: #0056b3;
+}
+/* === RESPONSIVE DESIGN === */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .faq-container {
+        margin: 100px auto;
+        padding: 35px;
+        max-width: 720px;
+    }
+    
+    .faq-container h1 {
+        font-size: 2rem;
+    }
+    
+    .faq-container .subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 40px;
+    }
+    
+    .faq-question {
+        padding: 20px 8px;
+        font-size: 1.1rem;
+    }
+    
+    .faq-answer {
+        font-size: 0.98rem;
+    }
+}
+
+/* Mobile Large (577px - 767px) */
+@media (max-width: 767px) {
+    .faq-container {
+        margin: 100px 20px;
+        padding: 30px 25px;
+        border-radius: 10px;
+    }
+    
+    .faq-container h1 {
+        font-size: 1.75rem;
+        margin-bottom: 12px;
+    }
+    
+    .faq-container .subtitle {
+        font-size: 1rem;
+        margin-bottom: 35px;
+        line-height: 1.5;
+    }
+    
+    .faq-question {
+        padding: 18px 5px;
+        font-size: 1.05rem;
+    }
+    
+    .faq-question span {
+        padding-right: 10px;
+    }
+    
+    .faq-question .fa-chevron-down {
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    
+    .faq-answer {
+        padding: 0 15px;
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+    
+    .faq-item.active .faq-answer {
+        padding: 8px 15px 25px 15px;
+    }
+    
+    .faq-answer ol {
+        padding-left: 20px;
+    }
+    
+    .faq-answer p,
+    .faq-answer ol {
+        margin-bottom: 0.85rem;
+    }
+}
+
+/* Mobile Small (max 576px) */
+@media (max-width: 576px) {
+    .faq-container {
+        margin: 90px 16px;
+        padding: 25px 20px;
+        border-radius: 8px;
+    }
+    
+    .faq-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .faq-container .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+    }
+    
+    .faq-question {
+        padding: 16px 0;
+        font-size: 1rem;
+        gap: 10px;
+    }
+    
+    .faq-question span {
+        flex: 1;
+        padding-right: 8px;
+        line-height: 1.4;
+    }
+    
+    .faq-question .fa-chevron-down {
+        font-size: 0.8rem;
+    }
+    
+    .faq-answer {
+        padding: 0 10px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .faq-item.active .faq-answer {
+        max-height: 600px;
+        padding: 6px 10px 20px 10px;
+    }
+    
+    .faq-answer ol {
+        padding-left: 18px;
+    }
+    
+    .faq-answer li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .faq-answer p,
+    .faq-answer ol {
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* Mobile Extra Small (max 375px) */
+@media (max-width: 375px) {
+    .faq-container {
+        margin: 80px 12px;
+        padding: 20px 16px;
+    }
+    
+    .faq-container h1 {
+        font-size: 1.35rem;
+    }
+    
+    .faq-container .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+    
+    .faq-question {
+        padding: 14px 0;
+        font-size: 0.95rem;
+    }
+    
+    .faq-answer {
+        font-size: 0.85rem;
+    }
+    
+    .faq-item.active .faq-answer {
+        padding: 5px 8px 18px 8px;
+    }
+    
+    .faq-answer ol {
+        padding-left: 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Landscape Mode Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .faq-container {
+        margin: 80px auto;
+        padding: 25px;
+    }
+    
+    .faq-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+    }
+    
+    .faq-container .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    
+    .faq-question {
+        padding: 14px 5px;
+        font-size: 0.95rem;
+    }
+    
+    .faq-answer {
+        font-size: 0.9rem;
+    }
+    
+    .faq-item.active .faq-answer {
+        max-height: 400px;
+        padding: 6px 15px 20px 15px;
+    }
+}
+
+/* Fix untuk prevent text overflow pada mobile */
+@media (max-width: 767px) {
+    .faq-question,
+    .faq-answer {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .faq-answer strong {
+        color: #0056b3;
+    }
+}

@@ -1,0 +1,344 @@
+/* ===============================
+   STYLE HALAMAN PERMOHONAN SURAT ADMIN
+================================ */
+
+/* HAPUS override .main-content di sini — sudah diatur admin.css */
+
+.main-container {
+    width: 100%;
+    max-width: 100%;  /* <-- Sebelumnya 1400px, sekarang full width */
+    margin: 0;
+    padding: 0;
+}
+
+/* Page Header */
+.page-header {
+    background: white;
+    padding: 28px 32px;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    border-left: 4px solid #1e3a8a;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px 0;
+}
+
+.page-header p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* === TAB BUTTONS === */
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 13px 20px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.tab-btn:hover {
+    background: #f1f5f9;
+    color: #1e3a8a;
+}
+
+.tab-btn.active {
+    background: #1e3a8a;
+    color: white;
+    box-shadow: 0 2px 8px rgba(30,58,138,0.25);
+}
+
+/* === TAB CONTENT === */
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* === TABLE CONTAINER === */
+.table-container {
+    background: white;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 0;
+}
+
+.table-container:first-of-type   { border-radius: 12px 12px 0 0; }
+.table-container:last-of-type    { border-radius: 0 0 12px 12px; margin-bottom: 20px; }
+.table-container:not(:last-of-type) { border-bottom: none; }
+.table-container:only-of-type    { border-radius: 12px; margin-bottom: 20px; }
+
+.table-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2b4897 100%);
+    padding: 18px 24px;
+}
+
+.table-header h2,
+.table-header h3 {
+    margin: 0;
+    font-size: 17px;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-header h2::before,
+.table-header h3::before {
+    content: '📋';
+    font-size: 18px;
+}
+
+/* === TABLE === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th {
+    background: #f8fafc;
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 700;
+    color: #475569;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    padding: 16px 18px;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f8fafc; }
+
+/* Nama pemohon */
+td:nth-child(2) a {
+    color: #1e3a8a;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+td:nth-child(2) a:hover { color: #2563eb; text-decoration: underline; }
+
+/* NIK */
+td:nth-child(3) {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #64748b;
+}
+
+/* Tanggal */
+td:nth-child(4) { color: #64748b; font-size: 13px; }
+
+/* Empty state */
+tr td[colspan] {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* === STATUS BADGE === */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status-diproses  { background: #fef3c7; color: #92400e; }
+.status-diproses::before  { background: #f59e0b; }
+
+.status-diterima  { background: #cce5ff; color: #004085; }
+.status-diterima::before  { background: #0d6efd; }
+
+.status-selesai   { background: #d1fae5; color: #065f46; }
+.status-selesai::before   { background: #10b981; }
+
+.status-ditolak   { background: #fee2e2; color: #991b1b; }
+.status-ditolak::before   { background: #ef4444; }
+
+/* === ACTION BUTTONS === */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.action-buttons form { display: inline-block; }
+
+.btn {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-detail      { background: #3b82f6; }
+.btn-detail:hover{ background: #2563eb; transform: translateY(-1px); }
+
+.btn-proses      { background: #8b5cf6; }
+.btn-proses:hover{ background: #7c3aed; transform: translateY(-1px); }
+
+.btn-selesai      { background: #10b981; }
+.btn-selesai:hover{ background: #059669; transform: translateY(-1px); }
+
+.btn-tolak        { background: #ef4444; }
+.btn-tolak:hover  { background: #dc2626; transform: translateY(-1px); }
+
+.btn-arsip        { background: #6c757d; }
+.btn-arsip:hover  { background: #5a6268; transform: translateY(-1px); }
+
+.btn-kirim-surat      { background: #0d6efd; }
+.btn-kirim-surat:hover{ background: #0b5ed7; transform: translateY(-1px); }
+
+/* === MODAL === */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    margin: 0;
+}
+
+.close-btn {
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.85;
+    transition: opacity 0.2s, transform 0.2s;
+}
+.close-btn:hover { opacity: 1; transform: rotate(90deg); }
+
+.modal-body { padding: 24px; }
+
+.modal-body textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30,58,138,0.08);
+}
+
+.btn-submit-tolak {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    transition: all 0.2s;
+}
+.btn-submit-tolak:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(239,68,68,0.35); }
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .tab-buttons    { flex-direction: column; }
+    .action-buttons { flex-direction: column; }
+    .btn            { width: 100%; justify-content: center; }
+    th, td          { padding: 10px 12px; font-size: 13px; }
+}

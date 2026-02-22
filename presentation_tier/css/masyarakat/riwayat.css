@@ -1,0 +1,628 @@
+/* =============================================
+    RIWAYAT SURAT — MODERN BLUE THEME
+   ============================================= */
+
+/* === VARIABEL WARNA (Diselaraskan) === */
+:root {
+    /* Background Overlay & Card */
+    --card-glass:   rgba(15, 23, 42, 0.65); /* Biru gelap transparan */
+    --card-border:  rgba(255, 255, 255, 0.12);
+    --item-glass:   rgba(255, 255, 255, 0.08);
+    --item-border:  rgba(255, 255, 255, 0.10);
+    --item-hover:   rgba(14, 165, 233, 0.15); /* Highlight biru saat hover */
+
+    /* Filter Buttons */
+    --filter-border:    rgba(255, 255, 255, 0.20);
+    --filter-active-bg: #0ea5e9;
+
+    /* Text */
+    --text-white:   #ffffff;
+    --text-light:   rgba(255, 255, 255, 0.85);
+    --text-muted:   rgba(255, 255, 255, 0.55);
+
+    /* Status Colors */
+    --status-diproses-bg:  rgba(14, 165, 233, 0.2);
+    --status-diproses-txt: #38bdf8;
+    --status-selesai-bg:   rgba(34, 197, 94, 0.2);
+    --status-selesai-txt:  #4ade80;
+    --status-ditolak-bg:   rgba(239, 68, 68, 0.2);
+    --status-ditolak-txt:  #f87171;
+    --status-menunggu-bg:  rgba(234, 179, 8, 0.2);
+    --status-menunggu-txt: #facc15;
+
+    /* Action Buttons */
+    --btn-unduh-start:  #0ea5e9;
+    --btn-unduh-end:    #0284c7;
+}
+
+/* === WRAPPER & BACKGROUND (KONSISTEN) === */
+.riwayat-wrapper {
+    position: relative;
+    min-height: 100vh;
+    /* Menggunakan gambar yang sama dengan Dashboard */
+    background: linear-gradient(
+        rgba(15, 23, 42, 0.8), 
+        rgba(30, 58, 138, 0.7)
+    ), 
+    url('/images/image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 120px 20px 80px; /* Padding atas agar tidak tertutup navbar */
+    font-family: 'Inter', sans-serif;
+}
+
+/* === CONTAINER === */
+.riwayat-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* === HEADER === */
+.riwayat-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.riwayat-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-white);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.riwayat-subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    opacity: 0.9;
+}
+
+/* === MAIN CARD (Glassmorphism) === */
+.riwayat-card {
+    background: var(--card-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* === TOOLBAR === */
+.riwayat-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--filter-border);
+    color: var(--text-light);
+    padding: 8px 22px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--text-white);
+}
+
+.filter-btn.active {
+    background: var(--filter-active-bg);
+    border-color: var(--filter-active-bg);
+    color: white;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+}
+
+/* === ITEM ROW === */
+.riwayat-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: var(--item-glass);
+    border: 1px solid var(--item-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.riwayat-item:hover {
+    background: var(--item-hover);
+    border-color: rgba(14, 165, 233, 0.4);
+    transform: translateX(5px);
+}
+
+/* Icon Wrap */
+.item-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: #38bdf8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Status Badges */
+.item-status {
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.riwayat-status-diproses { background: var(--status-diproses-bg); color: var(--status-diproses-txt); }
+.riwayat-status-selesai { background: var(--status-selesai-bg); color: var(--status-selesai-txt); }
+.riwayat-status-ditolak { background: var(--status-ditolak-bg); color: var(--status-ditolak-txt); }
+.riwayat-status-menunggu { background: var(--status-menunggu-bg); color: var(--status-menunggu-txt); }
+
+/* Buttons */
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn-unduh {
+    background: linear-gradient(135deg, var(--btn-unduh-start), var(--btn-unduh-end));
+    color: white;
+}
+
+.action-btn-unduh:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+}
+
+/* Empty State */
+.riwayat-empty {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.empty-icon {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .riwayat-wrapper { padding-top: 100px; }
+    .riwayat-item { flex-direction: column; align-items: flex-start; }
+    .item-actions { width: 100%; justify-content: flex-start; margin-top: 10px; }
+}
+/* Container Utama - Membatasi lebar agar tidak stretched */
+.riwayat-container {
+    max-width: 950px; /* Menjaga tampilan tetap compact seperti gambar 1 */
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Card Styling */
+.riwayat-card {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Wrapper Riwayat Item */
+.riwayat-item {
+    display: flex;
+    justify-content: space-between; /* Memisahkan konten kiri dan tombol kanan */
+    align-items: center; /* Menjaga semua elemen di tengah secara vertikal */
+    padding: 20px 25px;
+    margin: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+.item-left-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Icon Box */
+.item-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.3rem;
+}
+
+/* Teks Detail */
+.item-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.item-title {
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.item-meta {
+    color: #94a3b8;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Button Unduh - Perbaikan posisi dan ukuran */
+.btn-download {
+    background: #0ea5e9;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s ease;
+    border: none;
+}
+
+.btn-download:hover {
+    background: #0284c7;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
+    color: white;
+}
+
+/* Badge Status */
+.status-badge {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.status-selesai { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.status-diproses { background: rgba(234, 179, 8, 0.2); color: #fbbf24; }
+.status-ditolak { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+/* === RESPONSIVE DESIGN === */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+    .riwayat-wrapper {
+        padding: 100px 30px 60px;
+    }
+    
+    .riwayat-title {
+        font-size: 2rem;
+    }
+    
+    .riwayat-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .riwayat-item {
+        padding: 18px 20px;
+        margin: 12px;
+    }
+}
+
+/* Mobile Large (577px - 767px) */
+@media (max-width: 767px) {
+    .riwayat-wrapper {
+        padding: 100px 20px 50px;
+    }
+    
+    .riwayat-header {
+        margin-bottom: 30px;
+    }
+    
+    .riwayat-title {
+        font-size: 1.75rem;
+    }
+    
+    .riwayat-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .riwayat-card {
+        border-radius: 18px;
+    }
+    
+    /* Toolbar jadi vertikal */
+    .riwayat-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    .toolbar-filters {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .filter-btn {
+        flex: 1;
+        min-width: calc(50% - 4px);
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+    
+    .toolbar-info {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .count-label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+    
+    /* Item jadi vertikal */
+    .riwayat-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 16px;
+        margin: 10px;
+    }
+    
+    .riwayat-item:hover {
+        transform: translateX(0);
+        transform: translateY(-3px);
+    }
+    
+    .item-left-content {
+        width: 100%;
+        gap: 15px;
+    }
+    
+    .item-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+    
+    .item-details {
+        flex: 1;
+    }
+    
+    .item-title-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .item-title {
+        font-size: 1rem;
+    }
+    
+    .item-meta {
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .item-meta .dot {
+        display: none;
+    }
+    
+    .item-meta span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .item-right-actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+    
+    .btn-download,
+    .btn-reason {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .status-badge {
+        padding: 4px 12px;
+        font-size: 0.65rem;
+    }
+}
+
+/* Mobile Small (max 576px) */
+@media (max-width: 576px) {
+    .riwayat-wrapper {
+        padding: 90px 16px 40px;
+    }
+    
+    .riwayat-title {
+        font-size: 1.5rem;
+    }
+    
+    .riwayat-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .riwayat-card {
+        border-radius: 16px;
+    }
+    
+    .riwayat-toolbar {
+        padding: 16px;
+    }
+    
+    .filter-btn {
+        min-width: 100%;
+        padding: 10px;
+        font-size: 0.75rem;
+    }
+    
+    .riwayat-item {
+        padding: 14px;
+        margin: 8px;
+        border-radius: 12px;
+    }
+    
+    .item-left-content {
+        gap: 12px;
+    }
+    
+    .item-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+    }
+    
+    .item-title {
+        font-size: 0.95rem;
+    }
+    
+    .item-meta {
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+    
+    .item-meta i {
+        font-size: 0.7rem;
+    }
+    
+    .btn-download,
+    .btn-reason {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+    
+    .status-badge {
+        padding: 3px 10px;
+        font-size: 0.6rem;
+    }
+    
+    .count-label {
+        font-size: 0.8rem;
+    }
+    
+    /* Empty State */
+    .riwayat-empty {
+        padding: 60px 20px;
+    }
+    
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+}
+
+/* Mobile Extra Small (max 375px) */
+@media (max-width: 375px) {
+    .riwayat-title {
+        font-size: 1.35rem;
+    }
+    
+    .riwayat-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .riwayat-toolbar {
+        padding: 14px;
+    }
+    
+    .riwayat-item {
+        padding: 12px;
+    }
+    
+    .item-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .item-title {
+        font-size: 0.9rem;
+    }
+    
+    .btn-download,
+    .btn-reason {
+        font-size: 0.75rem;
+        padding: 9px 14px;
+    }
+}
+
+/* Landscape Mode Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .riwayat-wrapper {
+        padding: 80px 20px 30px;
+    }
+    
+    .riwayat-header {
+        margin-bottom: 20px;
+    }
+    
+    .riwayat-title {
+        font-size: 1.5rem;
+    }
+    
+    .riwayat-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .riwayat-item {
+        padding: 12px;
+        margin: 8px;
+    }
+}
