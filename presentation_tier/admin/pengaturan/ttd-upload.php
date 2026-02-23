@@ -6,11 +6,9 @@ ob_start();
 
 <div class="container-detail mt-4">
     <div class="card-detail shadow-sm border-0">
-        <div class="card-detail-header">
-            <div class="header-text">
-                <h5 class="mb-0">Pengaturan Tanda Tangan Kepala Desa</h5>
-                <p class="header-subtitle">Upload tanda tangan akan otomatis muncul di semua surat</p>
-            </div>
+        <div class="page-header">
+            <h1>Arsip Permohonan Surat</h1>
+            <p>Permohonan yang telah diarsipkan (Selesai/Ditolak &gt; 15 hari)</p>
         </div>
         <div class="card-detail-body px-5 py-4">
 

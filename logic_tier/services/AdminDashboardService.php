@@ -7,108 +7,107 @@
 
 if (!class_exists('AdminDashboardService')) {
 
-require_once __DIR__ . '/../../data_tier/config/database.php';
+    require_once __DIR__ . '/../../data_tier/config/database.php';
 
-class AdminDashboardService
-{
-    private PDO $db;
-
-    public function __construct()
+    class AdminDashboardService
     {
-        $this->db = Database::getInstance();
-    }
+        private PDO $db;
 
-    /**
-     * Ambil ringkasan statistik untuk dashboard
-     */
-    public function getDashboardSummary(): array
-    {
-        $totalDiproses = $this->countByStatus('permohonan_domisili', 'Diproses')
-                       + $this->countByStatus('permohonan_ktm', 'Diproses')
-                       + $this->countByStatus('permohonan_sku', 'Diproses');
+        public function __construct()
+        {
+            $this->db = Database::getInstance();
+        }
 
-        $totalSelesai  = $this->countByStatus('permohonan_domisili', 'Selesai')
-                       + $this->countByStatus('permohonan_ktm', 'Selesai')
-                       + $this->countByStatus('permohonan_sku', 'Selesai');
+        /**
+         * Ambil ringkasan statistik untuk dashboard
+         */
+        public function getDashboardSummary(): array
+        {
+            $totalDiproses = $this->countByStatus('permohonan_domisili', 'Diproses')
+                + $this->countByStatus('permohonan_ktm', 'Diproses')
+                + $this->countByStatus('permohonan_sku', 'Diproses');
 
-        $totalDitolak  = $this->countByStatus('permohonan_domisili', 'Ditolak')
-                       + $this->countByStatus('permohonan_ktm', 'Ditolak')
-                       + $this->countByStatus('permohonan_sku', 'Ditolak');
+            $totalSelesai  = $this->countByStatus('permohonan_domisili', 'Selesai')
+                + $this->countByStatus('permohonan_ktm', 'Selesai')
+                + $this->countByStatus('permohonan_sku', 'Selesai');
 
-        return compact('totalDiproses', 'totalSelesai', 'totalDitolak');
-    }
+            $totalDitolak  = $this->countByStatus('permohonan_domisili', 'Ditolak')
+                + $this->countByStatus('permohonan_ktm', 'Ditolak')
+                + $this->countByStatus('permohonan_sku', 'Ditolak');
 
-    /**
-     * Ambil data tambahan dashboard
-     */
-    public function getDashboardAdditionalData(): array
-    {
-        $today = date('Y-m-d');
+            return compact('totalDiproses', 'totalSelesai', 'totalDitolak');
+        }
 
-        $domisili = $this->getRecentWithLabel('permohonan_domisili', 'Surat Domisili', 5);
-        $ktm      = $this->getRecentWithLabel('permohonan_ktm', 'Surat Keterangan Tidak Mampu', 5);
-        $sku      = $this->getRecentWithLabel('permohonan_sku', 'Surat Keterangan Usaha', 5);
+        /**
+         * Ambil data tambahan dashboard
+         */
+        public function getDashboardAdditionalData(): array
+        {
+            $today = date('Y-m-d');
 
-        $recentPermohonan = array_merge($domisili, $ktm, $sku);
-        usort($recentPermohonan, fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
-        $recentPermohonan = array_slice($recentPermohonan, 0, 5);
+            $domisili = $this->getRecentWithLabel('permohonan_domisili', 'Surat Domisili', 5);
+            $ktm      = $this->getRecentWithLabel('permohonan_ktm', 'Surat Keterangan Tidak Mampu', 5);
+            $sku      = $this->getRecentWithLabel('permohonan_sku', 'Surat Keterangan Usaha', 5);
 
-        $totalUsers  = $this->countTable('users');
-        $totalAdmins = $this->countTable('admins');
+            $recentPermohonan = array_merge($domisili, $ktm, $sku);
+            usort($recentPermohonan, fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
+            $recentPermohonan = array_slice($recentPermohonan, 0, 5);
 
-        $todayPermohonan = $this->countByDate('permohonan_domisili', $today)
-                         + $this->countByDate('permohonan_ktm', $today)
-                         + $this->countByDate('permohonan_sku', $today);
+            $totalUsers  = $this->countTable('users');
+            $totalAdmins = $this->countTable('admins');
 
-        $totalArsip = $this->countArchived('permohonan_domisili')
-                    + $this->countArchived('permohonan_ktm')
-                    + $this->countArchived('permohonan_sku');
+            $todayPermohonan = $this->countByDate('permohonan_domisili', $today)
+                + $this->countByDate('permohonan_ktm', $today)
+                + $this->countByDate('permohonan_sku', $today);
 
-        return compact('recentPermohonan', 'totalUsers', 'totalAdmins', 'todayPermohonan', 'totalArsip');
-    }
+            $totalArsip = $this->countArchived('permohonan_domisili')
+                + $this->countArchived('permohonan_ktm')
+                + $this->countArchived('permohonan_sku');
 
-    // =========================================================
-    //  HELPER QUERY
-    // =========================================================
+            return compact('recentPermohonan', 'totalUsers', 'totalAdmins', 'todayPermohonan', 'totalArsip');
+        }
 
-    private function countByStatus(string $table, string $status): int
-    {
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$table} WHERE status = ?");
-        $stmt->execute([$status]);
-        return (int)$stmt->fetchColumn();
-    }
+        // =========================================================
+        //  HELPER QUERY
+        // =========================================================
 
-    private function countTable(string $table): int
-    {
-        return (int)$this->db->query("SELECT COUNT(*) FROM {$table}")->fetchColumn();
-    }
+        private function countByStatus(string $table, string $status): int
+        {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$table} WHERE status = ?");
+            $stmt->execute([$status]);
+            return (int)$stmt->fetchColumn();
+        }
 
-    private function countByDate(string $table, string $date): int
-    {
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$table} WHERE DATE(created_at) = ?");
-        $stmt->execute([$date]);
-        return (int)$stmt->fetchColumn();
-    }
+        private function countTable(string $table): int
+        {
+            return (int)$this->db->query("SELECT COUNT(*) FROM {$table}")->fetchColumn();
+        }
 
-    private function countArchived(string $table): int
-    {
-        return (int)$this->db->query(
-            "SELECT COUNT(*) FROM {$table} WHERE archived_at IS NOT NULL"
-        )->fetchColumn();
-    }
+        private function countByDate(string $table, string $date): int
+        {
+            $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$table} WHERE DATE(created_at) = ?");
+            $stmt->execute([$date]);
+            return (int)$stmt->fetchColumn();
+        }
 
-    private function getRecentWithLabel(string $table, string $label, int $limit): array
-    {
-        $stmt = $this->db->prepare("
+        private function countArchived(string $table): int
+        {
+            return (int)$this->db->query(
+                "SELECT COUNT(*) FROM {$table} WHERE archived_at IS NOT NULL"
+            )->fetchColumn();
+        }
+
+        private function getRecentWithLabel(string $table, string $label, int $limit): array
+        {
+            $stmt = $this->db->prepare("
             SELECT p.*, u.name AS user_name, '{$label}' AS jenis_surat
             FROM {$table} p
             LEFT JOIN users u ON u.id = p.user_id
             ORDER BY p.created_at DESC
             LIMIT {$limit}
         ");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 }
-
-} // end class_exists check

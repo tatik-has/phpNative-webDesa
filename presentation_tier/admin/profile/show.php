@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PRESENTATION TIER - Admin Profile
  * Pengganti: presentation_tier/admin/profile/show.blade.php
@@ -52,7 +53,9 @@ ob_start(); ?>
     </div>
 
     <div class="form-card">
-        <div class="card-header"><i class="fa-solid fa-lock"></i><h3>Keamanan</h3></div>
+        <div class="card-header"><i class="fa-solid fa-lock"></i>
+            <h3>Keamanan</h3>
+        </div>
         <div class="card-body">
             <div class="info-box">
                 <i class="fa-solid fa-info-circle"></i>
@@ -66,7 +69,7 @@ ob_start(); ?>
     </div>
 
     <div class="form-actions">
-        <a href="/admin/dashboard" class="btn btn-primary">
+        <a href="/web-pengajuan/admin/dashboard" class="btn btn-primary">
             <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
         </a>
     </div>

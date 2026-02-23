@@ -1,8 +1,4 @@
 <?php
-/**
- * PRESENTATION TIER - Laporan Admin
- * Pengganti: presentation_tier/admin/permohonan/laporan.blade.php
- */
 
 $pageTitle = 'Laporan Permohonan Surat';
 $extraCss  = ['/presentation_tier/css/admin/admin-laporan.css'];
@@ -17,7 +13,7 @@ ob_start(); ?>
 
     <!-- Filter -->
     <div class="filter-card">
-        <form action="/admin/laporan" method="GET" class="filter-form">
+        <form action="/web-pengajuan/admin/laporan" method="GET" class="filter-form">
             <div class="filter-group">
                 <label for="tanggal_mulai">Dari Tanggal</label>
                 <input type="date" id="tanggal_mulai" name="tanggal_mulai" value="<?= htmlspecialchars($tanggalMulai ?? '') ?>">
@@ -38,19 +34,19 @@ ob_start(); ?>
                 <button type="submit" class="btn btn-primary">
                     <i class="fa-solid fa-filter"></i> Filter
                 </button>
-                <a href="/admin/laporan?tanggal_mulai=<?= htmlspecialchars($tanggalMulai ?? '') ?>&tanggal_akhir=<?= htmlspecialchars($tanggalAkhir ?? '') ?>&status=<?= htmlspecialchars($statusFilter ?? 'semua') ?>&export=word"
-                   class="btn btn-success">
-                    <i class="fa-solid fa-file-word"></i> Unduh Laporan
+                <a href="/web-pengajuan/admin/laporan?tanggal_mulai=<?= htmlspecialchars($tanggalMulai ?? '') ?>&tanggal_akhir=<?= htmlspecialchars($tanggalAkhir ?? '') ?>&status=<?= htmlspecialchars($statusFilter ?? 'semua') ?>&export=word"
+                    class="btn btn-success">
+                    <i class="fa-solid fa-file-word"></i> Unduh Laporan Word
                 </a>
             </div>
         </form>
     </div>
 
     <?php if (!empty($statusFilter) && $statusFilter !== 'semua'): ?>
-    <div class="filter-info">
-        <i class="fa-solid fa-info-circle"></i>
-        Menampilkan data dengan status: <strong><?= htmlspecialchars(ucfirst($statusFilter)) ?></strong>
-    </div>
+        <div class="filter-info">
+            <i class="fa-solid fa-info-circle"></i>
+            Menampilkan data dengan status: <strong><?= htmlspecialchars(ucfirst($statusFilter)) ?></strong>
+        </div>
     <?php endif; ?>
 
     <!-- Tabel -->
@@ -78,13 +74,13 @@ ob_start(); ?>
                         <?php
                         $statusVal = $item['status'] ?? '';
                         $statusNorm = strtolower($statusVal);
-                        $badge = match($statusNorm) {
+                        $badge = match ($statusNorm) {
                             'selesai'  => 'status-selesai',
                             'diproses' => 'status-diproses',
                             'ditolak'  => 'status-ditolak',
                             default    => '',
                         };
-                        $tglSelesai = (in_array($statusNorm, ['selesai','ditolak']) && !empty($item['updated_at']))
+                        $tglSelesai = (in_array($statusNorm, ['selesai', 'ditolak']) && !empty($item['updated_at']))
                             ? date('d M Y, H:i', strtotime($item['updated_at'])) . ' WIB'
                             : '-';
                         ?>

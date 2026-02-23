@@ -5,17 +5,23 @@
  * PERBAIKAN: kirimNotifikasiUser() kini support NIK sebagai identifier
  * karena masyarakat tidak login (tidak punya user_id).
  * Notifikasi admin TIDAK DIUBAH.
+ *
+ * UPDATE: tambah method baca/hapus via NotificationRepository
+ * agar controller tidak akses PDO langsung.
  */
 
 require_once __DIR__ . '/../../data_tier/config/database.php';
+require_once __DIR__ . '/../../data_tier/repositories/NotificationRepository.php';
 
 class NotificationService
 {
     private PDO $db;
+    private NotificationRepository $repo;
 
     public function __construct()
     {
-        $this->db = Database::getInstance();
+        $this->db   = Database::getInstance();
+        $this->repo = new NotificationRepository();
     }
 
     /**
@@ -143,5 +149,63 @@ class NotificationService
             mt_rand(0, 0x3fff) | 0x8000,
             mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
         );
+    }
+
+    // =========================================================
+    // METHOD BARU — delegasi ke NotificationRepository
+    // =========================================================
+
+    /**
+     * Ambil notifikasi admin yang belum dibaca
+     * Dipakai oleh NotificationController (admin)
+     */
+    public function getUnreadAdmin(int $adminId): array
+    {
+        return $this->repo->getUnreadByAdmin($adminId);
+    }
+
+    /**
+     * Tandai semua notifikasi admin sebagai sudah dibaca
+     * Dipakai oleh NotificationController (admin)
+     */
+    public function markAllReadAdmin(int $adminId): void
+    {
+        $this->repo->markAllReadByAdmin($adminId);
+    }
+
+    /**
+     * Ambil semua notifikasi masyarakat berdasarkan NIK
+     * Dipakai oleh MasyarakatNotificationController
+     */
+    public function getByNik(string $nik): array
+    {
+        return $this->repo->getByNik($nik);
+    }
+
+    /**
+     * Tandai semua notifikasi masyarakat sebagai sudah dibaca
+     * Dipakai oleh MasyarakatNotificationController
+     */
+    public function markAllReadMasyarakat(string $nik): void
+    {
+        $this->repo->markAllReadByNik($nik);
+    }
+
+    /**
+     * Hapus semua notifikasi masyarakat berdasarkan NIK
+     * Dipakai oleh MasyarakatNotificationController
+     */
+    public function deleteAll(string $nik): void
+    {
+        $this->repo->deleteAllByNik($nik);
+    }
+
+    /**
+     * Hapus satu notifikasi masyarakat berdasarkan ID dan NIK
+     * Dipakai oleh MasyarakatNotificationController
+     */
+    public function deleteOne(string $id, string $nik): void
+    {
+        $this->repo->deleteByIdAndNik($id, $nik);
     }
 }

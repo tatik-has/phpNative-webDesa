@@ -5,7 +5,7 @@
  * Pengganti App\LogicTier\Controllers\Masyarakat\SKUController di Laravel.
  */
 
-require_once __DIR__ . '/../../services/SuratServices.php';
+require_once __DIR__ . '/../../services/SuratSkuService.php';
 
 class SKUController
 {

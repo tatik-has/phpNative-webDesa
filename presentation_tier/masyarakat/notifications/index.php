@@ -1,14 +1,4 @@
 <?php
-/**
- * PRESENTATION TIER - Notifikasi Masyarakat
- * Pengganti: presentation_tier/masyarakat/notifications/index.blade.php
- * Perubahan:
- *   $notifications->count() → count($notifications)
- *   @forelse → foreach + empty check
- *   $notification->data['pesan'] → array sudah di-decode controller
- *   $notification->created_at->diffForHumans() → fungsi manual
- *   @method('DELETE') → <input type="hidden" name="_method" value="DELETE">
- */
 
 $pageTitle = 'Notifikasi Anda';
 $extraCss = ['/web-pengajuan/presentation_tier/css/shared/notifications.css'];

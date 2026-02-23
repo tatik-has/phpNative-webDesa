@@ -86,7 +86,7 @@ class AdminLaporanController
             $_SESSION['error'] = 'Terjadi kesalahan: ' . $e->getMessage();
         }
 
-        header('Location: /web-pengajuan/admin/laporan');
+        header('Location: /web-pengajuan/admin/surat');
         exit;
     }
 

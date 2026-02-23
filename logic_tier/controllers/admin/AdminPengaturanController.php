@@ -33,6 +33,7 @@ class AdminPengaturanController
         $ttdUrl    = $this->ttdUrl();
         $ttdAda    = file_exists($ttdPath);
         $namaKades = $this->getNamaKades();
+        $nipKades  = $this->getNipKades();
 
         extract(compact('admin', 'ttdAda', 'ttdUrl', 'namaKades'));
         require_once __DIR__ . '/../../../presentation_tier/admin/pengaturan/ttd-upload.php';
@@ -100,6 +101,7 @@ class AdminPengaturanController
         AdminAuthMiddleware::check();
 
         $nama = trim($_POST['nama_kades'] ?? '');
+        $nip  = trim($_POST['nip_kades']  ?? '');
 
         if (empty($nama)) {
             $_SESSION['error'] = 'Nama kepala desa tidak boleh kosong.';
@@ -112,7 +114,7 @@ class AdminPengaturanController
 
         if (!is_dir($configDir)) mkdir($configDir, 0755, true);
 
-        $config = ['nama_kades' => $nama, 'updated_at' => date('Y-m-d H:i:s')];
+        $config = ['nama_kades' => $nama, 'nip_kades'  => $nip, 'updated_at' => date('Y-m-d H:i:s')];
         file_put_contents($configFile, json_encode($config, JSON_PRETTY_PRINT));
 
         $_SESSION['success'] = 'Nama kepala desa berhasil disimpan!';
@@ -120,14 +122,20 @@ class AdminPengaturanController
         exit;
     }
 
-    /**
-     * Helper: ambil nama kades dari config JSON
-     */
     private function getNamaKades(): string
     {
         $configFile = $this->configFile();
         if (!file_exists($configFile)) return '';
         $config = json_decode(file_get_contents($configFile), true);
         return $config['nama_kades'] ?? '';
+    }
+
+    // TAMBAH method baru
+    private function getNipKades(): string
+    {
+        $configFile = $this->configFile();
+        if (!file_exists($configFile)) return '';
+        $config = json_decode(file_get_contents($configFile), true);
+        return $config['nip_kades'] ?? '';
     }
 }

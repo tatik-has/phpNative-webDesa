@@ -180,21 +180,33 @@ class SuratTemplateService
         ";
     }
 
-    // FIX: urutan TTD → Nama → NIP (sesuai format surat resmi)
+    /**
+     * FIX: Baca nama_kades DAN nip_kades dari kades.json
+     * NIP ditampilkan jika ada, jika kosong baris NIP tidak muncul
+     */
     private function blockTtd(string $tanggal): string
     {
         $ttdAbsPath = $_SERVER['DOCUMENT_ROOT'] . $this->ttdPath;
-        $namaKades  = $this->getNamaKades();
+        $config     = $this->getKadesConfig();
+        $namaKades  = $config['nama_kades'] ?? '';
+        $nipKades   = $config['nip_kades']  ?? '';
 
+        // Gambar TTD
         if (file_exists($ttdAbsPath)) {
             $ttdImg = "<img src='{$this->ttdPath}?v=" . time() . "' alt='Tanda Tangan' class='ttd-img'>";
         } else {
             $ttdImg = "<div class='ttd-placeholder'><small style='color:#aaa;font-size:9pt;'>[TTD Kepala Desa]</small></div>";
         }
 
+        // Nama
         $namaTampil = !empty($namaKades)
             ? "<p><strong>" . htmlspecialchars($namaKades) . "</strong></p>"
             : "<p><strong>_______________________</strong></p>";
+
+        // FIX: NIP hanya tampil jika ada isinya
+        $nipTampil = !empty($nipKades)
+            ? "<p>NIP. " . htmlspecialchars($nipKades) . "</p>"
+            : '';
 
         return "
         <div class='ttd-surat'>
@@ -202,17 +214,21 @@ class SuratTemplateService
             <p>Kepala Desa Pakning Asal,</p>
             <div class='spasi-ttd'>{$ttdImg}</div>
             {$namaTampil}
-            <p>NIP. -</p>
+            {$nipTampil}
         </div>
         ";
     }
 
-    private function getNamaKades(): string
+    /**
+     * FIX: Diganti dari getNamaKades() menjadi getKadesConfig()
+     * agar bisa ambil nama_kades DAN nip_kades sekaligus
+     */
+    private function getKadesConfig(): array
     {
         $configFile = $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/data_tier/config/kades.json';
-        if (!file_exists($configFile)) return '';
+        if (!file_exists($configFile)) return [];
         $config = json_decode(file_get_contents($configFile), true);
-        return $config['nama_kades'] ?? '';
+        return is_array($config) ? $config : [];
     }
 
     private function wrapSurat(string $content): string

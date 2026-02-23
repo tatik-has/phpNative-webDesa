@@ -4,9 +4,6 @@
  * LOGIC TIER - AdminSuratService
  * Mengelola semua operasi permohonan surat oleh admin:
  * grouping, update status, detail, generate surat, arsip, auto-arsip.
- *
- * BUG FIX: File ini sebelumnya berisi class AdminDashboardService (salah copy).
- * Sekarang berisi class AdminSuratService yang benar.
  */
 
 require_once __DIR__ . '/../../data_tier/config/database.php';
@@ -37,13 +34,9 @@ class AdminSuratService
     }
 
     // =========================================================
-    //  GROUPING PERMOHONAN (untuk halaman admin/permohonan-surat)
+    //  GROUPING PERMOHONAN
     // =========================================================
 
-    /**
-     * Ambil semua permohonan dikelompokkan per jenis & status
-     * Dipanggil: AdminController::showPermohonanSurat()
-     */
     public function getGroupedPermohonan(): array
     {
         $statuses = ['Diproses', 'Diterima', 'Selesai', 'Ditolak'];
@@ -61,16 +54,12 @@ class AdminSuratService
         return compact('domisiliGrouped', 'skuGrouped', 'ktmGrouped');
     }
 
-    /**
-     * Ambil semua permohonan tanpa filter status (untuk semuaPermohonan)
-     */
     public function getAllPermohonan(): array
     {
         $domisili = $this->castStatusRows($this->domisiliRepo->getAllWithUser());
         $sku      = $this->castStatusRows($this->skuRepo->getAllWithUser());
         $ktm      = $this->castStatusRows($this->ktmRepo->getAllWithUser());
 
-        // Gabungkan dan group by status
         $all = array_merge(
             array_map(fn($r) => array_merge($r, ['type' => 'domisili']), $domisili),
             array_map(fn($r) => array_merge($r, ['type' => 'sku']),      $sku),
@@ -78,7 +67,6 @@ class AdminSuratService
         );
         usort($all, fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
 
-        // Group by status (sama dengan getGroupedPermohonan tapi dari semua data)
         $statuses = ['Diproses', 'Diterima', 'Selesai', 'Ditolak'];
         $domisiliGrouped = $skuGrouped = $ktmGrouped = [];
         foreach ($statuses as $s) {
@@ -94,10 +82,6 @@ class AdminSuratService
     //  DETAIL PERMOHONAN
     // =========================================================
 
-    /**
-     * Ambil detail satu permohonan dengan label jenis & title
-     * Dipanggil: AdminController::showTemplateSurat(), showDetailSurat(), printSurat()
-     */
     public function getPermohonanDetail(string $type, int $id): ?array
     {
         $repo = $this->getRepo($type);
@@ -106,13 +90,12 @@ class AdminSuratService
         $permohonan = $repo->findWithUser($id);
         if (!$permohonan) return null;
 
-        // Pastikan status adalah string (bukan enum object)
         $permohonan = $this->castStatusRows([$permohonan])[0];
 
         [$jenisSurat, $title] = match ($type) {
-            'domisili' => ['Keterangan Domisili',          'Detail Surat Keterangan Domisili'],
+            'domisili' => ['Keterangan Domisili',           'Detail Surat Keterangan Domisili'],
             'ktm'      => ['Keterangan Tidak Mampu (SKTM)', 'Detail Surat Keterangan Tidak Mampu'],
-            'sku'      => ['Keterangan Usaha (SKU)',        'Detail Surat Keterangan Usaha'],
+            'sku'      => ['Keterangan Usaha (SKU)',         'Detail Surat Keterangan Usaha'],
             default    => ['Surat', 'Detail Surat'],
         };
 
@@ -123,10 +106,6 @@ class AdminSuratService
     //  UPDATE STATUS
     // =========================================================
 
-    /**
-     * Update status permohonan (Diterima / Ditolak)
-     * Dipanggil: AdminController::updateStatusPermohonan()
-     */
     public function updateStatus(string $type, int $id, array $data): bool
     {
         $repo = $this->getRepo($type);
@@ -141,7 +120,6 @@ class AdminSuratService
 
         if ($result) {
             $permohonan = $repo->findOrFail($id);
-            // FIX: passing NIK ke notifikasi
             $this->notifService->kirimNotifikasiUser(
                 (int)($permohonan['user_id'] ?? 0),
                 $type,
@@ -149,12 +127,16 @@ class AdminSuratService
                 $data['status'],
                 $data['keterangan_penolakan'] ?? null,
                 null,
-                $permohonan['nik'] ?? null  // ← tambah NIK
+                $permohonan['nik'] ?? null
             );
         }
 
         return $result;
     }
+
+    // =========================================================
+    //  GENERATE SURAT
+    // =========================================================
 
     public function generateAndSaveSurat(string $type, int $id): bool
     {
@@ -165,6 +147,9 @@ class AdminSuratService
         $permohonan = $this->castStatusRows([$permohonan])[0];
 
         $html = $this->templateService->generateTemplate($type, $permohonan);
+
+        // Embed semua gambar lokal ke Base64 agar bisa dibuka/didownload offline
+        $html = $this->embedImagesToBase64($html);
 
         $uploadDir = __DIR__ . '/../../uploads/surat_selesai/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
@@ -180,7 +165,6 @@ class AdminSuratService
         ]);
 
         if ($result) {
-            // FIX: passing NIK ke notifikasi
             $this->notifService->kirimNotifikasiUser(
                 (int)($permohonan['user_id'] ?? 0),
                 $type,
@@ -188,7 +172,7 @@ class AdminSuratService
                 'Selesai',
                 null,
                 $relativePath,
-                $permohonan['nik'] ?? null  // ← tambah NIK
+                $permohonan['nik'] ?? null
             );
         }
 
@@ -199,10 +183,6 @@ class AdminSuratService
     //  ARSIP
     // =========================================================
 
-    /**
-     * Arsipkan satu permohonan secara manual
-     * Dipanggil: AdminController::archivePermohonan()
-     */
     public function archivePermohonan(string $type, int $id): bool
     {
         $repo = $this->getRepo($type);
@@ -210,15 +190,11 @@ class AdminSuratService
         return $repo->archive($id);
     }
 
-    /**
-     * Auto-arsip permohonan Selesai/Ditolak yang lebih dari 15 hari
-     * Dipanggil: AdminController::runAutoArchive() & AdminLaporanController::runAutoArchive()
-     */
     public function autoArchiveOldPermohonan(): int
     {
-        $tables  = ['permohonan_domisili', 'permohonan_ktm', 'permohonan_sku'];
-        $count   = 0;
-        $cutoff  = date('Y-m-d H:i:s', strtotime('-15 days'));
+        $tables = ['permohonan_domisili', 'permohonan_ktm', 'permohonan_sku'];
+        $count  = 0;
+        $cutoff = date('Y-m-d H:i:s', strtotime('-15 days'));
 
         foreach ($tables as $table) {
             $stmt = $this->db->prepare("
@@ -239,9 +215,6 @@ class AdminSuratService
     //  HELPER
     // =========================================================
 
-    /**
-     * Ambil repository yang sesuai dengan type
-     */
     private function getRepo(string $type): PermohonanDomisiliRepository|PermohonanKTMRepository|PermohonanSKURepository|null
     {
         return match ($type) {
@@ -252,12 +225,6 @@ class AdminSuratService
         };
     }
 
-    /**
-     * Pastikan kolom 'status' adalah string (bukan StatusPermohonan enum object)
-     * karena view memakai === 'Diproses', bukan ->value
-     * BUG FIX: castRow() di BaseModel mengubah status jadi enum object,
-     * tapi view PHP native butuh string biasa.
-     */
     private function castStatusRows(array $rows): array
     {
         return array_map(function (array $row) {
@@ -266,5 +233,30 @@ class AdminSuratService
             }
             return $row;
         }, $rows);
+    }
+
+    /**
+     * Embed semua gambar lokal dalam HTML menjadi Base64
+     * agar file HTML bisa dibuka/didownload tanpa koneksi server
+     */
+    private function embedImagesToBase64(string $html): string
+    {
+        return preg_replace_callback(
+            '/(<img[^>]+src=")[^"]*?(\/web-pengajuan\/|\/uploads\/|\/images\/)([^"]+)(")/i',
+            function ($matches) {
+                $relativePath = $matches[2] . $matches[3];
+                $absolutePath = $_SERVER['DOCUMENT_ROOT'] . $relativePath;
+
+                if (file_exists($absolutePath)) {
+                    $mime    = mime_content_type($absolutePath);
+                    $base64  = base64_encode(file_get_contents($absolutePath));
+                    $dataUri = "data:{$mime};base64,{$base64}";
+                    return $matches[1] . $dataUri . $matches[4];
+                }
+
+                return $matches[0];
+            },
+            $html
+        );
     }
 }

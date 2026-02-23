@@ -56,25 +56,6 @@ ob_start(); ?>
     <!-- Dashboard Grid -->
     <div class="dashboard-grid">
 
-        <!-- Aksi Cepat -->
-        <div class="dashboard-card quick-actions">
-            <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
-            <div class="action-buttons">
-                <a href="/web-pengajuan/admin/surat" class="action-btn btn-primary">
-                    <i class="fas fa-inbox"></i>
-                    <span>Lihat Permohonan</span>
-                </a>
-                <a href="/web-pengajuan/admin/laporan" class="action-btn btn-secondary">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Buat Laporan</span>
-                </a>
-                <a href="/web-pengajuan/admin/arsip" class="action-btn btn-info">
-                    <i class="fas fa-archive"></i>
-                    <span>Arsip Surat</span>
-                </a>
-            </div>
-        </div>
-
         <!-- Statistik Chart -->
         <div class="dashboard-card statistics-card">
             <h3><i class="fas fa-chart-pie"></i> Statistik Permohonan</h3>
@@ -136,29 +117,6 @@ ob_start(); ?>
             <a href="/web-pengajuan/admin/semua-permohonan" class="view-all">
                 Lihat Semua <i class="fas fa-arrow-right"></i>
             </a>
-        </div>
-
-        <!-- Informasi Sistem -->
-        <div class="dashboard-card system-info">
-            <h3><i class="fas fa-info-circle"></i> Informasi Sistem</h3>
-            <div class="info-list">
-                <div class="info-item">
-                    <span class="info-label">Total User:</span>
-                    <span class="info-value"><?= (int)($totalUsers ?? 0) ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Total Admin:</span>
-                    <span class="info-value"><?= (int)($totalAdmins ?? 0) ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Permohonan Hari Ini:</span>
-                    <span class="info-value"><?= (int)($todayPermohonan ?? 0) ?></span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Arsip Total:</span>
-                    <span class="info-value"><?= (int)($totalArsip ?? 0) ?></span>
-                </div>
-            </div>
         </div>
 
     </div><!-- /.dashboard-grid -->

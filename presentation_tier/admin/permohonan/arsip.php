@@ -16,7 +16,7 @@ ob_start(); ?>
     </div>
 
     <div style="margin-bottom:20px;">
-        <form action="/admin/run-auto-archive" method="POST" style="display:inline;">
+        <form action="/web-pengajuan/admin/run-auto-archive" method="POST" style="display:inline;">
             <input type="hidden" name="_token" value="<?= htmlspecialchars(session_id()) ?>">
             <button type="submit" class="btn btn-primary"
                 onclick="return confirm('Jalankan arsip otomatis?')"

@@ -1,50 +1,26 @@
 <?php
 
-require_once __DIR__ . '/../../../data_tier/config/database.php';
+require_once __DIR__ . '/../../services/NotificationService.php';
 
 class MasyarakatNotificationController
 {
-    private PDO $db;
+    private NotificationService $service;
 
     public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) session_start();
-        $this->db = Database::getInstance();
+        $this->service = new NotificationService();
     }
 
     public function index(): void
     {
-        // UBAH: pakai NIK dari session, bukan user_id
-        $nik = $_SESSION['nik_pemohon'] ?? null;
+        $nik           = $_SESSION['nik_pemohon'] ?? null;
         $notifications = [];
 
         if ($nik) {
             try {
-                $stmt = $this->db->prepare("
-                SELECT id, type, data, created_at, read_at
-                FROM notifications
-                WHERE notifiable_type = 'Masyarakat'
-                  AND notifiable_id = ?
-                ORDER BY created_at DESC
-                LIMIT 50
-            ");
-                $stmt->execute([$nik]);
-                $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                foreach ($notifications as &$notif) {
-                    if (is_string($notif['data'])) {
-                        $notif['data'] = json_decode($notif['data'], true) ?? [];
-                    }
-                }
-
-                // Tandai sudah dibaca
-                $now = date('Y-m-d H:i:s');
-                $this->db->prepare("
-                UPDATE notifications SET read_at = ?
-                WHERE notifiable_type = 'Masyarakat'
-                  AND notifiable_id = ?
-                  AND read_at IS NULL
-            ")->execute([$now, $nik]);
+                $notifications = $this->service->getByNik($nik);
+                $this->service->markAllReadMasyarakat($nik);
             } catch (Exception $e) {
                 $notifications = [];
             }
@@ -56,12 +32,7 @@ class MasyarakatNotificationController
     public function deleteAll(): void
     {
         $nik = $_SESSION['nik_pemohon'] ?? null;
-        if ($nik) {
-            $this->db->prepare("
-            DELETE FROM notifications
-            WHERE notifiable_type = 'Masyarakat' AND notifiable_id = ?
-        ")->execute([$nik]);
-        }
+        if ($nik) $this->service->deleteAll($nik);
         header('Location: /web-pengajuan/notifications');
         exit;
     }
@@ -69,14 +40,7 @@ class MasyarakatNotificationController
     public function delete(string $id): void
     {
         $nik = $_SESSION['nik_pemohon'] ?? null;
-        if ($nik) {
-            $this->db->prepare("
-            DELETE FROM notifications
-            WHERE id = ?
-              AND notifiable_type = 'Masyarakat'
-              AND notifiable_id = ?
-        ")->execute([$id, $nik]);
-        }
+        if ($nik) $this->service->deleteOne($id, $nik);
         header('Location: /web-pengajuan/notifications');
         exit;
     }

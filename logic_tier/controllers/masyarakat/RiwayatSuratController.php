@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../services/SuratServices.php';
+require_once __DIR__ . '/../../services/RiwayatSuratService.php';
 
 class RiwayatSuratController
 {

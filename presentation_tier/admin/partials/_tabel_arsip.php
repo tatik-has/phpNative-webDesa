@@ -6,7 +6,11 @@
  * Variabel: $permohonans (array), $type (string)
  */
 
-$detailBase = ['domisili' => '/admin/domisili/', 'sku' => '/admin/sku/', 'ktm' => '/admin/ktm/'];
+$detailBase = [
+    'domisili' => '/web-pengajuan/admin/domisili/',
+    'sku'      => '/web-pengajuan/admin/sku/',
+    'ktm'      => '/web-pengajuan/admin/ktm/',
+];
 $base = $detailBase[$type] ?? '#';
 ?>
 
@@ -32,8 +36,12 @@ $base = $detailBase[$type] ?? '#';
                 <?php
                 $statusValue = $item['status'] ?? '';
                 $detailUrl   = $base . ($item['id'] ?? '');
-                $deleteUrl   = '/admin/surat/' . $type . '/' . ($item['id'] ?? '') . '/delete';
-                $archived    = $item['archived_at'] ? date('d M Y, H:i', strtotime($item['archived_at'])) : '-';
+                $deleteUrl   = '/web-pengajuan/admin/surat/' . $type . '/' . ($item['id'] ?? '') . '/delete';
+
+                // FIX: hitung $archived di dalam loop, bukan di luar
+                $archived = !empty($item['archived_at'])
+                    ? date('d M Y, H:i', strtotime($item['archived_at'])) . ' WIB'
+                    : '-';
                 ?>
                 <tr>
                     <td><?= $i + 1 ?></td>
@@ -43,7 +51,7 @@ $base = $detailBase[$type] ?? '#';
                         </a>
                     </td>
                     <td><?= htmlspecialchars($item['nik'] ?? '-') ?></td>
-                    <td><?= date('d M Y, H:i', strtotime($item['created_at'] ?? '')) ?></td>
+                    <td><?= date('d M Y, H:i', strtotime($item['created_at'] ?? '')) ?> WIB</td>
                     <td><?= $archived ?></td>
                     <td>
                         <?php if ($statusValue === 'Selesai'): ?>

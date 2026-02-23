@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PRESENTATION TIER - Riwayat Pengajuan Masyarakat
  * Pengganti: presentation_tier/masyarakat/riwayat/index.blade.php (Doc 12)
@@ -54,7 +55,7 @@ $total   = count($riwayat);
                         $type        = $item['type'] ?? 'domisili';
 
                         // Icon per jenis
-                        $icon = match($type) {
+                        $icon = match ($type) {
                             'domisili' => 'fa-home',
                             'ktm'      => 'fa-hand-holding-heart',
                             'sku'      => 'fa-briefcase',
@@ -67,46 +68,49 @@ $total   = count($riwayat);
 
                         // Unduh surat jika selesai
                         $pathSurat = $item['path_surat_jadi'] ?? null;
-                        $downloadUrl = $pathSurat ? '/' . ltrim($pathSurat, '/') : null;
+                        $downloadUrl = $pathSurat ? '/web-pengajuan/' . ltrim($pathSurat, '/') : null;
                     ?>
-                    <div class="riwayat-item" data-status="<?= htmlspecialchars($statusValue) ?>">
+                        <div class="riwayat-item" data-status="<?= htmlspecialchars($statusValue) ?>">
 
-                        <div class="item-left-content">
-                            <div class="item-icon">
-                                <i class="fas <?= $icon ?>"></i>
+                            <div class="item-left-content">
+                                <div class="item-icon">
+                                    <i class="fas <?= $icon ?>"></i>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-title-wrapper">
+                                        <h5 class="item-title"><?= htmlspecialchars($jenisSurat) ?></h5>
+                                        <span class="status-badge status-<?= $statusLow ?>">
+                                            <?= htmlspecialchars($statusValue) ?>
+                                        </span>
+                                    </div>
+                                    <div class="item-meta">
+                                        <span><i class="far fa-calendar-alt"></i> <?= $tglPengajuan ?></span>
+                                        <span class="dot">•</span>
+                                        <span><i class="far fa-clock"></i> <?= $jamPengajuan ?> WIB</span>
+                                        <span class="dot">•</span>
+                                        <span><i class="far fa-user"></i> <?= $nama ?></span>
+                                    </div>
+
+                                    <?php if ($statusValue === 'Ditolak' && !empty($item['keterangan_penolakan'])): ?>
+                                        <p class="alasan-penolakan" style="color:#dc3545;margin-top:6px;font-size:13px;">
+                                            <strong>Alasan Penolakan:</strong> <?= htmlspecialchars($item['keterangan_penolakan']) ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                            <div class="item-details">
-                                <div class="item-title-wrapper">
-                                    <h5 class="item-title"><?= htmlspecialchars($jenisSurat) ?></h5>
-                                    <span class="status-badge status-<?= $statusLow ?>">
-                                        <?= htmlspecialchars($statusValue) ?>
-                                    </span>
-                                </div>
-                                <div class="item-meta">
-                                    <span><i class="far fa-calendar-alt"></i> <?= $tglPengajuan ?></span>
-                                    <span class="dot">•</span>
-                                    <span><i class="far fa-clock"></i> <?= $jamPengajuan ?> WIB</span>
-                                    <span class="dot">•</span>
-                                    <span><i class="far fa-user"></i> <?= $nama ?></span>
-                                </div>
 
-                                <?php if ($statusValue === 'Ditolak' && !empty($item['keterangan_penolakan'])): ?>
-                                    <p class="alasan-penolakan" style="color:#dc3545;margin-top:6px;font-size:13px;">
-                                        <strong>Alasan Penolakan:</strong> <?= htmlspecialchars($item['keterangan_penolakan']) ?>
-                                    </p>
+                            <div class="item-right-actions">
+                                <?php if ($statusValue === 'Selesai' && $downloadUrl): ?>
+                                    <a href="<?= htmlspecialchars($downloadUrl) ?>"
+                                        download
+                                        target="_blank"
+                                        class="btn-download">
+                                        <i class="fas fa-download"></i> Unduh
+                                    </a>
                                 <?php endif; ?>
                             </div>
-                        </div>
 
-                        <div class="item-right-actions">
-                            <?php if ($statusValue === 'Selesai' && $downloadUrl): ?>
-                                <a href="<?= htmlspecialchars($downloadUrl) ?>" target="_blank" class="btn-download">
-                                    <i class="fas fa-download"></i> Unduh
-                                </a>
-                            <?php endif; ?>
                         </div>
-
-                    </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
@@ -118,20 +122,20 @@ $total   = count($riwayat);
 
 ob_start(); ?>
 <script>
-document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const filter = this.dataset.filter;
-        document.querySelectorAll('.riwayat-item').forEach(item => {
-            if (filter === 'semua' || item.dataset.status === filter) {
-                item.style.display = 'flex';
-            } else {
-                item.style.display = 'none';
-            }
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const filter = this.dataset.filter;
+            document.querySelectorAll('.riwayat-item').forEach(item => {
+                if (filter === 'semua' || item.dataset.status === filter) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
     });
-});
 </script>
 <?php $scripts = ob_get_clean();
 

@@ -21,11 +21,14 @@
 
     <?php
     if (session_status() === PHP_SESSION_NONE) session_start();
+
+    // Flash messages
     $flashSuccess = $_SESSION['success'] ?? null;
     $flashError   = $_SESSION['error']   ?? null;
     $errors       = $_SESSION['errors']  ?? [];
     unset($_SESSION['success'], $_SESSION['error'], $_SESSION['errors']);
 
+    // Active nav helper
     $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     function isActiveNav(string $pattern): string
     {
@@ -33,23 +36,26 @@
         return str_starts_with($currentPath, $pattern) ? 'active' : '';
     }
 
-    // FIX: Hitung notifikasi belum dibaca berdasarkan NIK session
-    $unreadCount = 0;
-    $nikPemohon  = $_SESSION['nik_pemohon'] ?? null;
-    if ($nikPemohon) {
-        try {
-            require_once $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/data_tier/config/database.php';
-            $db   = Database::getInstance();
-            $stmt = $db->prepare("
-                SELECT COUNT(*) FROM notifications
-                WHERE notifiable_type = 'Masyarakat'
-                  AND notifiable_id   = ?
-                  AND read_at IS NULL
-            ");
-            $stmt->execute([$nikPemohon]);
-            $unreadCount = (int)$stmt->fetchColumn();
-        } catch (Exception $e) {
-            $unreadCount = 0;
+    // Hitung unread badge:
+    // - Jika controller sudah inject $unreadCount (halaman notifikasi), pakai itu
+    // - Jika tidak, hitung langsung dari DB agar badge muncul di semua halaman
+    if (!isset($unreadCount)) {
+        $unreadCount = 0;
+        $nik = $_SESSION['nik_pemohon'] ?? null;
+        if ($nik) {
+            try {
+                $dbForBadge = Database::getInstance();
+                $stmtBadge  = $dbForBadge->prepare("
+                    SELECT COUNT(*) FROM notifications
+                    WHERE notifiable_type = 'Masyarakat'
+                      AND notifiable_id   = ?
+                      AND read_at IS NULL
+                ");
+                $stmtBadge->execute([$nik]);
+                $unreadCount = (int)$stmtBadge->fetchColumn();
+            } catch (Exception $e) {
+                $unreadCount = 0;
+            }
         }
     }
     ?>
@@ -71,7 +77,11 @@
         <?php if (!empty($errors)): ?>
             <div class="custom-alert alert-error">
                 <i class="fas fa-exclamation-circle"></i>
-                <span><?= htmlspecialchars(is_array($errors) ? implode(' | ', array_map(fn($e) => is_array($e) ? $e[0] : $e, $errors)) : $errors) ?></span>
+                <span><?= htmlspecialchars(
+                    is_array($errors)
+                        ? implode(' | ', array_map(fn($e) => is_array($e) ? $e[0] : $e, $errors))
+                        : $errors
+                ) ?></span>
             </div>
         <?php endif; ?>
     </div>
@@ -98,32 +108,20 @@
                 <i class="fas fa-history"></i><span class="menu-text">Riwayat</span>
             </a>
 
-            <!-- FIX: Bell dengan badge unread count -->
-            <a href="/web-pengajuan/notifications" class="<?= isActiveNav('/web-pengajuan/notifications') ?>" style="position:relative;">
+            <a href="/web-pengajuan/notifications"
+               class="<?= isActiveNav('/web-pengajuan/notifications') ?>"
+               style="position:relative;">
                 <i class="fas fa-bell"></i>
                 <?php if ($unreadCount > 0): ?>
-                    <span style="
-                        position:absolute;
-                        top:-6px;
-                        right:-6px;
-                        background:#e74c3c;
-                        color:#fff;
-                        font-size:10px;
-                        font-weight:700;
-                        min-width:18px;
-                        height:18px;
-                        border-radius:50%;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        padding:0 4px;
-                        line-height:1;
-                    "><?= $unreadCount > 99 ? '99+' : $unreadCount ?></span>
+                    <span class="notif-badge-nav">
+                        <?= $unreadCount > 99 ? '99+' : $unreadCount ?>
+                    </span>
                 <?php endif; ?>
                 <span class="menu-text">Notifikasi</span>
             </a>
 
-            <a href="/web-pengajuan/faq" class="<?= str_contains($currentPath, '/faq') ? 'active' : '' ?>">
+            <a href="/web-pengajuan/faq"
+               class="<?= str_contains($currentPath, '/faq') ? 'active' : '' ?>">
                 <i class="fas fa-question-circle"></i><span class="menu-text">FAQ</span>
             </a>
         </div>
@@ -136,41 +134,49 @@
 
     <!-- FOOTER -->
     <footer class="main-footer">
-        <p>&copy; 2026 Hastita Sari. All Rights Reserved.</p>
+        <p>&copy; <?= date('Y') ?> Hastita Sari. All Rights Reserved.</p>
         <small>Sistem Administrasi Surat-Menyurat Desa Pakning Asal</small>
     </footer>
 
     <script>
+        // Auto dismiss alert setelah 5 detik
         setTimeout(function() {
             document.querySelectorAll('.custom-alert').forEach(a => {
                 a.style.transition = 'opacity .6s ease, transform .6s ease';
-                a.style.opacity = '0';
-                a.style.transform = 'translateX(120%)';
+                a.style.opacity    = '0';
+                a.style.transform  = 'translateX(120%)';
                 setTimeout(() => a.remove(), 600);
             });
         }, 5000);
+
+        // Klik untuk dismiss alert
         document.querySelectorAll('.custom-alert').forEach(a => {
             a.style.cursor = 'pointer';
             a.addEventListener('click', function() {
                 this.style.transition = 'opacity .3s ease, transform .3s ease';
-                this.style.opacity = '0';
-                this.style.transform = 'translateX(120%)';
+                this.style.opacity    = '0';
+                this.style.transform  = 'translateX(120%)';
                 setTimeout(() => this.remove(), 300);
             });
         });
+
+        // Hamburger menu mobile
         const hamburger = document.getElementById('hamburgerMenu');
         const navMenu   = document.getElementById('navbarMenu');
         const overlay   = document.getElementById('mobileOverlay');
+
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
             overlay.classList.toggle('active');
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
+
         overlay.addEventListener('click', () => {
             [hamburger, navMenu, overlay].forEach(el => el.classList.remove('active'));
             document.body.style.overflow = '';
         });
+
         navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 if (window.innerWidth <= 767) {
@@ -187,4 +193,5 @@
 
     <?= $scripts ?? '' ?>
 </body>
+
 </html>
