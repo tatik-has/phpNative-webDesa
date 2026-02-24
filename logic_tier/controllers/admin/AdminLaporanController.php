@@ -1,16 +1,15 @@
 <?php
 
 /**
- * LOGIC TIER - Controller Admin Laporan
- * Pengganti App\LogicTier\Controllers\Admin\AdminLaporanController di Laravel.
+ * SISTEM LOGIKA - Controller Laporan Admin
  */
 
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 require_once __DIR__ . '/../../services/AdminLaporanService.php';
 require_once __DIR__ . '/../../services/AdminSuratService.php';
-require_once __DIR__ . '/../../../data_tier/repositories/PermohonanDomisiliRepository.php';
-require_once __DIR__ . '/../../../data_tier/repositories/PermohonanKTMRepository.php';
-require_once __DIR__ . '/../../../data_tier/repositories/PermohonanSKURepository.php';
+require_once __DIR__ . '/../../repositories/PermohonanDomisiliRepository.php';
+require_once __DIR__ . '/../../repositories/PermohonanKTMRepository.php';
+require_once __DIR__ . '/../../repositories/PermohonanSKURepository.php';
 
 class AdminLaporanController
 {
@@ -19,24 +18,19 @@ class AdminLaporanController
 
     public function __construct()
     {
-        AdminAuthMiddleware::check();
+        ValidasiLogin::cekSesi();
         $this->laporanService = new AdminLaporanService();
         $this->suratService   = new AdminSuratService();
     }
 
-    /**
-     * Tampilkan laporan dengan filter tanggal & status
-     * Setara: showLaporan(FilterLaporanRequest $request) di Laravel
-     */
     public function showLaporan(): void
     {
-        $admin        = AdminAuthMiddleware::getAdmin();
+        $admin        = ValidasiLogin::ambilDataAdmin();
         $tanggalMulai = $_GET['tanggal_mulai'] ?? date('Y-m-01');
         $tanggalAkhir = $_GET['tanggal_akhir'] ?? date('Y-m-d');
         $statusFilter = $_GET['status'] ?? 'semua';
         $export       = $_GET['export'] ?? null;
 
-        // Validasi tanggal
         if ($tanggalMulai > $tanggalAkhir) {
             $_SESSION['error'] = 'Tanggal mulai tidak boleh lebih dari tanggal akhir.';
             $tanggalMulai = date('Y-m-01');
@@ -45,7 +39,6 @@ class AdminLaporanController
 
         $allPermohonan = $this->laporanService->getLaporanData($tanggalMulai, $tanggalAkhir, $statusFilter);
 
-        // Export ke Word
         if ($export === 'word') {
             $statusLabel = $statusFilter === 'semua' ? 'Semua' : ucfirst($statusFilter);
             $fileName    = "Laporan_Surat_{$statusLabel}_{$tanggalMulai}_sd_{$tanggalAkhir}.doc";
@@ -63,10 +56,6 @@ class AdminLaporanController
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/laporan.php';
     }
 
-    /**
-     * Archive permohonan dari halaman laporan
-     * Setara: archivePermohonan(ArchivePermohonanRequest $request) di Laravel
-     */
     public function archivePermohonan(string $type, int $id): void
     {
         if (empty($type) || $id === 0) {
@@ -77,11 +66,9 @@ class AdminLaporanController
 
         try {
             $success = $this->laporanService->archiveData($type, $id);
-
             $_SESSION[$success ? 'success' : 'error'] = $success
                 ? 'Data permohonan berhasil diarsipkan.'
                 : 'Jenis surat tidak valid.';
-
         } catch (Exception $e) {
             $_SESSION['error'] = 'Terjadi kesalahan: ' . $e->getMessage();
         }
@@ -90,22 +77,14 @@ class AdminLaporanController
         exit;
     }
 
-    /**
-     * Tampilkan halaman arsip
-     * Setara: showArsip() di Laravel
-     */
     public function showArsip(): void
     {
-        $admin        = AdminAuthMiddleware::getAdmin();
+        $admin        = ValidasiLogin::ambilDataAdmin();
         $archivedData = $this->laporanService->getArchivedPermohonan();
         extract(array_merge(['admin' => $admin], $archivedData));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/arsip.php';
     }
 
-    /**
-     * Hapus permanen dari arsip
-     * Setara: destroyPermanently(ArchivePermohonanRequest $request) di Laravel
-     */
     public function destroyPermanently(string $type, int $id): void
     {
         try {
@@ -122,7 +101,6 @@ class AdminLaporanController
             } else {
                 $_SESSION['error'] = 'Jenis data tidak valid.';
             }
-
         } catch (Exception $e) {
             $_SESSION['error'] = 'Gagal menghapus data: ' . $e->getMessage();
         }
@@ -131,9 +109,6 @@ class AdminLaporanController
         exit;
     }
 
-    /**
-     * Jalankan auto archive
-     */
     public function runAutoArchive(): void
     {
         $count = $this->suratService->autoArchiveOldPermohonan();

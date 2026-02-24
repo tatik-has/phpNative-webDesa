@@ -4,7 +4,7 @@
  * LOGIC TIER - Service Surat SKU
  */
 
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanSKURepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanSKURepository.php';
 require_once __DIR__ . '/NotificationService.php';
 require_once __DIR__ . '/FileUploadService.php';
 

@@ -11,7 +11,7 @@
  */
 
 require_once __DIR__ . '/../../data_tier/config/database.php';
-require_once __DIR__ . '/../../data_tier/repositories/NotificationRepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/NotificationRepository.php';
 
 class NotificationService
 {

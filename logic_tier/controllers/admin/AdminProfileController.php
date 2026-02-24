@@ -1,33 +1,28 @@
 <?php
 
 /**
- * LOGIC TIER - Controller Admin Profile
- * Pengganti App\LogicTier\Controllers\Admin\AdminProfileController di Laravel.
+ * SISTEM LOGIKA - Controller Profil Admin
  */
 
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 require_once __DIR__ . '/../../../data_tier/models/Admin.php';
 
 class AdminProfileController
 {
     public function __construct()
     {
-        AdminAuthMiddleware::check();
+        ValidasiLogin::cekSesi();
     }
 
-    /**
-     * Tampilkan profil admin (read-only)
-     * Setara: show() di Laravel
-     */
     public function show(): void
     {
-        $adminSession = AdminAuthMiddleware::getAdmin();
+        $adminSession = ValidasiLogin::ambilDataAdmin();
 
         // Ambil data lengkap dari database
         $adminModel = new Admin();
         $admin      = $adminModel->find((int)$adminSession['id']);
 
-        // Sembunyikan password
+        // Sembunyikan password agar aman
         if ($admin) {
             $admin = $adminModel->hideFields($admin);
         }

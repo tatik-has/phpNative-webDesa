@@ -7,9 +7,9 @@
  */
 
 require_once __DIR__ . '/../../data_tier/config/database.php';
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanDomisiliRepository.php';
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanKTMRepository.php';
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanSKURepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanDomisiliRepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanKTMRepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanSKURepository.php';
 require_once __DIR__ . '/NotificationService.php';
 require_once __DIR__ . '/SuratTemplateService.php';
 require_once __DIR__ . '/FileUploadService.php';

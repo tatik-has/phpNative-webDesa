@@ -6,7 +6,7 @@
  * PERUBAHAN: Auth::id() → session user_id (karena tidak ada login masyarakat)
  */
 
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanDomisiliRepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanDomisiliRepository.php';
 require_once __DIR__ . '/NotificationService.php';
 require_once __DIR__ . '/FileUploadService.php';
 

@@ -1,11 +1,5 @@
 <?php
 
-/**
- * LOGIC TIER - Controller Permohonan Domisili
- * Pengganti App\LogicTier\Controllers\Masyarakat\DomisiliController di Laravel.
- * PERUBAHAN: Tidak ada middleware auth → akses publik.
- */
-
 require_once __DIR__ . '/../../services/SuratDomisiliService.php';
 
 class DomisiliController
@@ -26,10 +20,6 @@ class DomisiliController
         require_once __DIR__ . '/../../../presentation_tier/masyarakat/permohonan/domisili.php';
     }
 
-    /**
-     * Proses simpan permohonan domisili
-     * Setara: store(StoreDomisiliRequest $request) di Laravel
-     */
     public function store(): void
     {
         $errors = $this->validateDomisili($_POST, $_FILES);
@@ -58,10 +48,7 @@ class DomisiliController
         }
     }
 
-    /**
-     * Validasi input form domisili
-     * Pengganti StoreDomisiliRequest di Laravel
-     */
+
     private function validateDomisili(array $post, array $files): array
     {
         $errors = [];

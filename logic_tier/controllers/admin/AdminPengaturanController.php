@@ -1,10 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+/**
+ * SISTEM LOGIKA - Controller Pengaturan Sistem
+ */
+
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 
 class AdminPengaturanController
 {
-    // FIX: gunakan DOCUMENT_ROOT agar path selalu tepat
     private function ttdAbsPath(): string
     {
         return $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/assets/img/ttd-kepala-desa.png';
@@ -20,14 +23,10 @@ class AdminPengaturanController
         return $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/data_tier/config/kades.json';
     }
 
-    /**
-     * Halaman pengaturan TTD
-     * Route: GET /admin/pengaturan/ttd
-     */
     public function showTtdPage(): void
     {
-        AdminAuthMiddleware::check();
-        $admin = AdminAuthMiddleware::getAdmin();
+        ValidasiLogin::cekSesi();
+        $admin = ValidasiLogin::ambilDataAdmin();
 
         $ttdPath   = $this->ttdAbsPath();
         $ttdUrl    = $this->ttdUrl();
@@ -35,19 +34,14 @@ class AdminPengaturanController
         $namaKades = $this->getNamaKades();
         $nipKades  = $this->getNipKades();
 
-        extract(compact('admin', 'ttdAda', 'ttdUrl', 'namaKades'));
+        extract(compact('admin', 'ttdAda', 'ttdUrl', 'namaKades', 'nipKades'));
         require_once __DIR__ . '/../../../presentation_tier/admin/pengaturan/ttd-upload.php';
     }
 
-    /**
-     * Proses upload TTD
-     * Route: POST /admin/pengaturan/ttd/upload
-     */
     public function uploadTtd(): void
     {
-        AdminAuthMiddleware::check();
+        ValidasiLogin::cekSesi();
 
-        // Hapus TTD jika dicentang
         if (!empty($_POST['hapus_ttd'])) {
             $ttdPath = $this->ttdAbsPath();
             if (file_exists($ttdPath)) unlink($ttdPath);
@@ -56,7 +50,6 @@ class AdminPengaturanController
             exit;
         }
 
-        // Validasi file
         if (empty($_FILES['ttd_file']['tmp_name'])) {
             $_SESSION['error'] = 'File tanda tangan wajib dipilih.';
             header('Location: /web-pengajuan/admin/pengaturan/ttd');
@@ -65,7 +58,7 @@ class AdminPengaturanController
 
         $file    = $_FILES['ttd_file'];
         $allowed = ['image/png', 'image/jpeg'];
-        $maxSize = 2 * 1024 * 1024; // 2MB
+        $maxSize = 2 * 1024 * 1024; 
 
         if (!in_array($file['type'], $allowed)) {
             $_SESSION['error'] = 'Format file harus PNG atau JPG.';
@@ -79,26 +72,20 @@ class AdminPengaturanController
             exit;
         }
 
-        // FIX: pakai DOCUMENT_ROOT untuk path simpan file
         $destDir  = $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/assets/img/';
         $destFile = $destDir . 'ttd-kepala-desa.png';
 
         if (!is_dir($destDir)) mkdir($destDir, 0755, true);
-
         move_uploaded_file($file['tmp_name'], $destFile);
 
-        $_SESSION['success'] = 'Tanda tangan berhasil diupload! Akan muncul di semua surat.';
+        $_SESSION['success'] = 'Tanda tangan berhasil diupload!';
         header('Location: /web-pengajuan/admin/pengaturan/ttd');
         exit;
     }
 
-    /**
-     * Simpan nama kepala desa
-     * Route: POST /admin/pengaturan/ttd/nama
-     */
     public function simpanNamaKades(): void
     {
-        AdminAuthMiddleware::check();
+        ValidasiLogin::cekSesi();
 
         $nama = trim($_POST['nama_kades'] ?? '');
         $nip  = trim($_POST['nip_kades']  ?? '');
@@ -111,7 +98,6 @@ class AdminPengaturanController
 
         $configFile = $this->configFile();
         $configDir  = dirname($configFile);
-
         if (!is_dir($configDir)) mkdir($configDir, 0755, true);
 
         $config = ['nama_kades' => $nama, 'nip_kades'  => $nip, 'updated_at' => date('Y-m-d H:i:s')];
@@ -130,7 +116,6 @@ class AdminPengaturanController
         return $config['nama_kades'] ?? '';
     }
 
-    // TAMBAH method baru
     private function getNipKades(): string
     {
         $configFile = $this->configFile();

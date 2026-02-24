@@ -4,7 +4,7 @@
  * LOGIC TIER - Service Surat KTM (SKTM)
  */
 
-require_once __DIR__ . '/../../data_tier/repositories/PermohonanKTMRepository.php';
+require_once __DIR__ . '/../../logic_tier/repositories/PermohonanKTMRepository.php';
 require_once __DIR__ . '/NotificationService.php';
 require_once __DIR__ . '/FileUploadService.php';
 

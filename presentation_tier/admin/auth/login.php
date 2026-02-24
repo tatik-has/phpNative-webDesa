@@ -1,8 +1,4 @@
 <?php
-/**
- * PRESENTATION TIER - Admin Login
- * Pengganti: presentation_tier/admin/auth/login.blade.php
- */
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 

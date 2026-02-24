@@ -1,0 +1,189 @@
+
+        <style>
+            .surat-container {
+                font-family: "Times New Roman", Times, serif;
+                font-size: 12pt;
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto;
+                padding: 20mm 25mm 20mm 30mm;
+                background: white;
+                color: #000;
+                line-height: 1.5;
+                box-sizing: border-box;
+            }
+            .kop-surat {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 4px;
+            }
+            .logo-desa {
+                width: 80px;
+                height: 80px;
+                object-fit: contain;
+            }
+            .kop-teks {
+                flex: 1;
+                text-align: center;
+            }
+            .kop-provinsi {
+                font-size: 13pt;
+                font-weight: normal;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+            .kop-kecamatan {
+                font-size: 12pt;
+                font-weight: normal;
+                margin: 0;
+            }
+            .kop-desa {
+                font-size: 16pt;
+                font-weight: bold;
+                text-transform: uppercase;
+                margin: 2px 0;
+            }
+            .kop-alamat {
+                font-size: 9pt;
+                margin: 1px 0;
+            }
+            .garis-kop-atas {
+                border: 2.5px solid #000;
+                margin: 6px 0 1px 0;
+            }
+            .garis-kop-bawah {
+                border: 1px solid #000;
+                margin: 0 0 16px 0;
+            }
+            .judul-surat {
+                text-align: center;
+                margin: 20px 0 16px 0;
+            }
+            .judul-surat h2 {
+                font-size: 13pt;
+                text-decoration: underline;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+            }
+            .judul-surat p {
+                margin: 0;
+                font-size: 12pt;
+                letter-spacing: 1px;
+            }
+            .isi-surat {
+                margin: 16px 0;
+            }
+            .paragraf {
+                text-align: justify;
+                text-indent: 40px;
+                margin: 10px 0;
+            }
+            .tabel-data {
+                width: 90%;
+                margin: 12px 0 12px 40px;
+                border-collapse: collapse;
+            }
+            .tabel-data td {
+                padding: 3px 6px;
+                vertical-align: top;
+                font-size: 12pt;
+            }
+            .tabel-data td:first-child {
+                width: 200px;
+                text-transform: uppercase;
+            }
+            .ttd-surat {
+                margin-top: 30px;
+                text-align: center;
+                float: right;
+                width: 220px;
+                margin-right: 10px;
+            }
+            .ttd-surat p {
+                margin: 2px 0;
+            }
+            .spasi-ttd {
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .ttd-img {
+                max-height: 75px;
+                max-width: 180px;
+                object-fit: contain;
+            }
+            .ttd-placeholder {
+                height: 75px;
+                width: 180px;
+            }
+            @media print {
+                body { margin: 0; }
+                .surat-container {
+                    width: 210mm;
+                    min-height: 297mm;
+                    padding: 20mm 25mm 20mm 30mm;
+                    box-shadow: none;
+                }
+                .no-print { display: none !important; }
+            }
+        </style>
+        <div class="surat-container">
+            
+            
+        <div class='kop-surat'>
+            <div class='kop-logo'>
+                <img src='/web-pengajuan/images/logo.png' alt='Logo' class='logo-desa'>
+            </div>
+            <div class='kop-teks'>
+                <p class='kop-provinsi'>PEMERINTAH KABUPATEN BENGKALIS</p>
+                <p class='kop-kecamatan'>KECAMATAN BUKIT BATU</p>
+                <p class='kop-desa'>KANTOR DESA PAKNING ASAL</p>
+                <p class='kop-alamat'>Jl. Sukajadi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kode Pos 28761</p>
+                <p class='kop-alamat'>Email: Pakningasal36@gmail.com, website pemdespakningasal.com</p>
+            </div>
+        </div>
+        <hr class='garis-kop-atas'>
+        <hr class='garis-kop-bawah'>
+        
+
+            <div class='judul-surat'>
+                <h2>SURAT KETERANGAN DOMISILI</h2>
+                <p>NOMOR: 470/SKD/PA/2026</p>
+            </div>
+
+            <div class='isi-surat'>
+                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis 
+                dengan ini menerangkan :</p>
+
+                <table class='tabel-data'>
+                    <tr><td>NAMA</td><td>: <strong>Wulan Cahyani</strong></td></tr>
+                    <tr><td>NIK</td><td>: 1233333333333330</td></tr>
+                    <tr><td>JENIS KELAMIN</td><td>: Perempuan</td></tr>
+                    <tr><td>ALAMAT KTP</td><td>: Pakning Asal</td></tr>
+                    <tr><td>ALAMAT DOMISILI</td><td>: Jl. Merdeka No. 12, Desa Pakning Asal, Bengkalis, RT 001 / RW 002</td></tr>
+                </table>
+
+                <p class='paragraf' style='margin-top: 20px;'>
+                    Adalah benar-benar warga yang berdomisili di wilayah Desa Pakning Asal 
+                    sebagaimana alamat yang tertera di atas.
+                </p>
+
+                <p class='paragraf'>
+                    Demikianlah Surat Keterangan Domisili ini dibuat dengan sebenarnya untuk 
+                    dapat dipergunakan sebagaimana mestinya.
+                </p>
+            </div>
+
+            
+        <div class='ttd-surat'>
+            <p>Pakning Asal, 24 Februari 2026</p>
+            <p>Kepala Desa Pakning Asal,</p>
+            <div class='spasi-ttd'><img src='/web-pengajuan/assets/img/ttd-kepala-desa.png?v=1771920915' alt='Tanda Tangan' class='ttd-img'></div>
+            <p><strong>Hastita Sari</strong></p>
+            <p>NIP. 00000001</p>
+        </div>
+        
+        
+        </div>

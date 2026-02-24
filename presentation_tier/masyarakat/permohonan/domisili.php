@@ -1,8 +1,4 @@
 <?php
-/**
- * PRESENTATION TIER - Form Domisili LENGKAP dengan real-time validation
- * Pengganti: presentation_tier/masyarakat/permohonan/domisili.blade.php
- */
 
 $pageTitle = 'Pengajuan Surat Keterangan Domisili';
 $extraCss  = ['/web-pengajuan/presentation_tier/css/masyarakat/domisili.css'];
@@ -11,8 +7,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
 $oldInput = $_SESSION['old_input'] ?? [];
 
-// Ambil errors dan filter hanya field milik form domisili
-// (mencegah error dari halaman lain seperti login ikut tampil)
 $allErrors      = $_SESSION['errors'] ?? [];
 $domisiliFields = ['nik','nama','alamat_domisili','nomor_telp','rt_domisili','rw_domisili','jenis_kelamin','alamat_ktp','ktp','kk'];
 $errors         = array_intersect_key($allErrors, array_flip($domisiliFields));

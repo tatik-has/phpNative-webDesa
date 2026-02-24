@@ -2,11 +2,7 @@
 
 require_once __DIR__ . '/../config/database.php';
 
-/**
- * DATA TIER - Base Model
- * Pengganti Illuminate\Database\Eloquent\Model di Laravel.
- * Menyediakan operasi CRUD dasar menggunakan PDO.
- */
+
 
 abstract class BaseModel
 {
@@ -29,13 +25,7 @@ abstract class BaseModel
         $this->db = Database::getInstance();
     }
 
-    // =========================================================
-    //  QUERY HELPERS
-    // =========================================================
-
-    /**
-     * Ambil semua data (setara Model::all())
-     */
+    
     public function all(): array
     {
         $stmt = $this->db->query("SELECT * FROM {$this->table} ORDER BY created_at DESC");

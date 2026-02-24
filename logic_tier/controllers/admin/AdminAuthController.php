@@ -1,12 +1,7 @@
 <?php
 
-/**
- * LOGIC TIER - Controller Admin Auth
- * Pengganti App\LogicTier\Controllers\Admin\AdminAuthController di Laravel.
- */
-
 require_once __DIR__ . '/../../../data_tier/models/Admin.php';
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 
 class AdminAuthController
 {
@@ -21,8 +16,7 @@ class AdminAuthController
     public function showLogin(): void
     {
         if (!empty($_SESSION['admin_id'])) {
-            // SEBELUM: header('Location: /../../../presentation_tier/admin/dashboard');
-            // SESUDAH:
+
             header('Location: /web-pengajuan/admin/dashboard');
             exit;
         }
@@ -40,8 +34,7 @@ class AdminAuthController
         if (!empty($errors)) {
             $_SESSION['errors']    = $errors;
             $_SESSION['old_input'] = ['email' => $email];
-            // SEBELUM: header('Location: /admin/login');
-            // SESUDAH:
+ 
             header('Location: /web-pengajuan/admin/login');
             exit;
         }
@@ -54,8 +47,6 @@ class AdminAuthController
             $_SESSION['admin_email'] = $admin['email'];
             $_SESSION['admin_role']  = $admin['role'];
 
-            // SEBELUM: header('Location: /admin/dashboard');
-            // SESUDAH:
             header('Location: /web-pengajuan/admin/dashboard');
             exit;
         }
@@ -71,8 +62,7 @@ class AdminAuthController
     public function logout(): void
     {
         session_destroy();
-        // SEBELUM: header('Location: /admin/login');
-        // SESUDAH:
+    
         header('Location: /web-pengajuan/admin/login');
         exit;
     }

@@ -1,18 +1,18 @@
 <?php
 
 require_once __DIR__ . '/BaseRepository.php';
-require_once __DIR__ . '/../models/PermohonanKtm.php';
+require_once __DIR__ . '/../../data_tier/models/PermohonanSKU.php';
 
 /**
- * LOGIC TIER - Repository PermohonanKTM
- * Setara App\DataTier\Repositories\PermohonanKTMRepository di Laravel.
+ * LOGIC TIER - Repository PermohonanSKU
+ * Setara App\DataTier\Repositories\PermohonanSKURepository di Laravel.
  */
 
-class PermohonanKTMRepository extends BaseRepository
+class PermohonanSKURepository extends BaseRepository
 {
     public function __construct()
     {
-        $this->model = new PermohonanKtm();
+        $this->model = new PermohonanSKU();
     }
 
     /**

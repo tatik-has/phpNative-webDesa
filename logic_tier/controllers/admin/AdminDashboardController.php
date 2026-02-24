@@ -1,11 +1,6 @@
 <?php
 
-/**
- * LOGIC TIER - Controller Admin Dashboard
- * Pengganti App\LogicTier\Controllers\Admin\AdminDashboardController di Laravel.
- */
-
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 require_once __DIR__ . '/../../services/AdminDashboardService.php';
 
 class AdminDashboardController
@@ -14,17 +9,13 @@ class AdminDashboardController
 
     public function __construct()
     {
-        AdminAuthMiddleware::check(); // Wajib login
+        ValidasiLogin::cekSesi();
         $this->dashboardService = new AdminDashboardService();
     }
 
-    /**
-     * Tampilkan dashboard admin dengan summary data
-     * Setara: index() di Laravel
-     */
     public function index(): void
     {
-        $admin          = AdminAuthMiddleware::getAdmin();
+        $admin          = ValidasiLogin::ambilDataAdmin();
         $summary        = $this->dashboardService->getDashboardSummary();
         $additionalData = $this->dashboardService->getDashboardAdditionalData();
 

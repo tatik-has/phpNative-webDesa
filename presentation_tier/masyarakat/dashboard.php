@@ -1,9 +1,5 @@
 <?php
 
-/**
- * PRESENTATION TIER - Dashboard Masyarakat (Publik)
- */
-
 $pageTitle = 'Beranda - Desa Pakning Asal';
 $extraCss  = ['/web-pengajuan/presentation_tier/css/masyarakat/dashboard.css'];
 $extraJs   = ['https://cdn.jsdelivr.net/npm/sweetalert2@11'];
@@ -55,9 +51,9 @@ ob_start(); ?>
                     <h3 class="step-title">Pilih Jenis Surat</h3>
                     <p class="step-desc">Klik tombol <strong>"Pengajuan Surat"</strong> lalu pilih salah satu jenis surat yang Anda butuhkan.</p>
                     <div class="step-tags">
-                        <span class="tag">📄 Keterangan Tidak Mampu</span>
-                        <span class="tag">🏠 Keterangan Domisili</span>
-                        <span class="tag">💼 Keterangan Usaha</span>
+                        <span class="tag"> Keterangan Tidak Mampu</span>
+                        <span class="tag"> Keterangan Domisili</span>
+                        <span class="tag"> Keterangan Usaha</span>
                     </div>
                 </div>
             </div>
@@ -75,9 +71,9 @@ ob_start(); ?>
                     <h3 class="step-title">Isi Formulir & Upload Dokumen</h3>
                     <p class="step-desc">Lengkapi data diri dengan benar dan upload dokumen pendukung yang diminta.</p>
                     <div class="step-tags">
-                        <span class="tag">🪪 KTP</span>
-                        <span class="tag">👨‍👩‍👧 Kartu Keluarga</span>
-                        <span class="tag">📜 Surat Pengantar RT/RW</span>
+                        <span class="tag"> KTP</span>
+                        <span class="tag"> Kartu Keluarga</span>
+                        <span class="tag"> Surat Pengantar RT/RW</span>
                     </div>
                 </div>
             </div>
@@ -95,8 +91,8 @@ ob_start(); ?>
                     <h3 class="step-title">Pantau Status Permohonan</h3>
                     <p class="step-desc">Admin akan memverifikasi dalam <strong>1–2 hari kerja</strong>. Pantau perkembangan melalui:</p>
                     <div class="step-tags">
-                        <span class="tag">🔔 Notifikasi di menu atas</span>
-                        <span class="tag"><a href="/web-pengajuan/riwayat" class="tag-link">📋 Halaman Riwayat</a></span>
+                        <span class="tag"><a href="/web-pengajuan/notifications" class="tag-link"> Notifikasi di menu atas</a></span>
+                        <span class="tag"><a href="/web-pengajuan/riwayat" class="tag-link"> Halaman Riwayat</a></span>
                     </div>
                 </div>
             </div>

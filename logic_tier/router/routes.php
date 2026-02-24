@@ -1,19 +1,7 @@
 <?php
 
-/**
- * LOGIC TIER - Routes
- * Pengganti routes/web.php Laravel.
- *
- * PERBAIKAN dari versi sebelumnya:
- * 1. Hapus route mati: POST /admin/surat/{type}/{id}/kirim-surat
- *    (method kirimSurat() tidak ada di AdminController — sudah diganti template-based)
- * 2. require_once controller yang sebelumnya hilang sudah ditambahkan:
- *    - PengajuanSuratController.php
- *    - NotificationController.php (di controllers/shared/)
- */
-
 require_once __DIR__ . '/Router.php';
-require_once __DIR__ . '/../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../keamanan/ValidasiLogin.php';
 
 // ── Controllers Admin ──
 require_once __DIR__ . '/../controllers/admin/AdminAuthController.php';
@@ -21,7 +9,7 @@ require_once __DIR__ . '/../controllers/admin/AdminController.php';
 require_once __DIR__ . '/../controllers/admin/AdminDashboardController.php';
 require_once __DIR__ . '/../controllers/admin/AdminLaporanController.php';
 require_once __DIR__ . '/../controllers/admin/AdminProfileController.php';
-require_once __DIR__ . '/../controllers/admin/AdminPengaturanController.php'; // FIX: tambah ini
+require_once __DIR__ . '/../controllers/admin/AdminPengaturanController.php'; 
 
 // ── Controllers Masyarakat ──
 require_once __DIR__ . '/../controllers/masyarakat/MasyarakatDashboardController.php';

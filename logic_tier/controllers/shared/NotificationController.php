@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 require_once __DIR__ . '/../../services/NotificationService.php';
 
 class NotificationController
@@ -9,10 +9,14 @@ class NotificationController
 
     public function __construct()
     {
-        AdminAuthMiddleware::check();
+        // Perbaikan panggilan method: check() -> cekSesi()
+        ValidasiLogin::cekSesi();
         $this->service = new NotificationService();
     }
 
+    /**
+     * Mengambil daftar notifikasi yang belum dibaca (format JSON)
+     */
     public function getUnread(): void
     {
         header('Content-Type: application/json');
@@ -35,6 +39,9 @@ class NotificationController
         }
     }
 
+    /**
+     * Menandai semua notifikasi admin sebagai sudah dibaca
+     */
     public function markAsRead(): void
     {
         header('Content-Type: application/json');
@@ -46,6 +53,7 @@ class NotificationController
         }
 
         try {
+            // Memanggil layanan untuk memperbarui status di database
             $this->service->markAllReadAdmin((int)$adminId);
             echo json_encode(['success' => true]);
         } catch (Exception $e) {

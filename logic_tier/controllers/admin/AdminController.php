@@ -1,14 +1,6 @@
 <?php
 
-/**
- * LOGIC TIER - Controller Admin Surat
- * Pengganti App\LogicTier\Controllers\Admin\AdminController di Laravel.
- *
- * FITUR BARU: showTemplateSurat() + generateSurat() untuk template surat HTML
- * yang otomatis terisi dari data permohonan.
- */
-
-require_once __DIR__ . '/../../middleware/AdminAuthMiddleware.php';
+require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
 require_once __DIR__ . '/../../services/AdminSuratService.php';
 require_once __DIR__ . '/../../services/SuratTemplateService.php';
 
@@ -19,18 +11,19 @@ class AdminController
 
     public function __construct()
     {
-        AdminAuthMiddleware::check();
+        // Menggunakan class keamanan baru
+        ValidasiLogin::cekSesi();
         $this->permohonanService = new AdminSuratService();
         $this->templateService   = new SuratTemplateService();
     }
 
     /**
      * Daftar permohonan dikelompokkan berdasarkan status
-     * Setara: showPermohonanSurat() di Laravel
      */
     public function showPermohonanSurat(): void
     {
-        $admin       = AdminAuthMiddleware::getAdmin();
+        // Mengambil data admin dari Pelindung/ValidasiLogin
+        $admin       = ValidasiLogin::ambilDataAdmin();
         $groupedData = $this->permohonanService->getGroupedPermohonan();
         extract(array_merge(['admin' => $admin], $groupedData));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/permohonan-surat.php';
@@ -41,7 +34,7 @@ class AdminController
      */
     public function semuaPermohonan(): void
     {
-        $admin   = AdminAuthMiddleware::getAdmin();
+        $admin   = ValidasiLogin::ambilDataAdmin();
         $allData = $this->permohonanService->getAllPermohonan();
         extract(array_merge(['admin' => $admin], $allData));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/permohonan-surat.php';
@@ -49,11 +42,9 @@ class AdminController
 
     /**
      * Update status permohonan (Diterima / Ditolak)
-     * Setara: updateStatusPermohonan() di Laravel
      */
     public function updateStatusPermohonan(string $type, int $id): void
     {
-        // Validasi input
         $status  = trim($_POST['status'] ?? '');
         $errors  = [];
 
@@ -81,12 +72,7 @@ class AdminController
     }
 
     /**
-     * =====================================================
-     * FITUR BARU: Tampilkan template surat HTML
-     * yang sudah terisi otomatis dari data permohonan
-     * =====================================================
-     * Setara: kirimSurat() di Laravel (diganti jadi template-based)
-     * Route: GET /admin/surat/{type}/{id}/template
+     * Tampilkan cetakan surat sementara sebelum di-generate
      */
     public function showTemplateSurat(string $type, int $id): void
     {
@@ -97,12 +83,11 @@ class AdminController
             return;
         }
 
-        $admin      = AdminAuthMiddleware::getAdmin();
+        $admin      = ValidasiLogin::ambilDataAdmin();
         $permohonan = $data['permohonan']  ?? [];
-        $jenisSurat = $data['jenis_surat'] ?? 'Surat';        // FIX: null coalescing
-        $title      = $data['title']       ?? 'Template Surat'; // FIX: null coalescing
+        $jenisSurat = $data['jenis_surat'] ?? 'Surat';
+        $title      = $data['title']       ?? 'Template Surat';
 
-        // Generate HTML template surat yang sudah terisi data
         $templateHtml = $this->templateService->generateTemplate($type, $permohonan);
 
         extract(compact('admin', 'permohonan', 'jenisSurat', 'title', 'templateHtml', 'type', 'id'));
@@ -110,18 +95,14 @@ class AdminController
     }
 
     /**
-     * =====================================================
-     * FITUR BARU: Simpan surat yang sudah di-generate
-     * dan update status menjadi Selesai
-     * =====================================================
-     * Route: POST /admin/surat/{type}/{id}/generate-surat
+     * Simpan hasil surat jadi dan update status ke Selesai
      */
     public function generateSurat(string $type, int $id): void
     {
         $result = $this->permohonanService->generateAndSaveSurat($type, $id);
 
         if ($result) {
-            $_SESSION['success'] = 'Surat berhasil dibuat dan dikirim ke masyarakat! Status diperbarui menjadi Selesai.';
+            $_SESSION['success'] = 'Surat berhasil dibuat dan dikirim! Status diperbarui menjadi Selesai.';
         } else {
             $_SESSION['error'] = 'Gagal membuat surat. Silakan coba lagi.';
         }
@@ -131,8 +112,7 @@ class AdminController
     }
 
     /**
-     * Cetak / preview surat (print view)
-     * Route: GET /admin/surat/{type}/{id}/print
+     * Cetak langsung surat ke printer
      */
     public function printSurat(string $type, int $id): void
     {
@@ -146,13 +126,12 @@ class AdminController
         $permohonan   = $data['permohonan'];
         $templateHtml = $this->templateService->generateTemplate($type, $permohonan);
 
-        // Print view — tanpa layout admin, hanya surat saja
         extract(compact('permohonan', 'templateHtml', 'type'));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/print-surat.php';
     }
 
     /**
-     * Detail permohonan (KTM / SKU / Domisili)
+     * Detail lengkap permohonan
      */
     public function showDetailSurat(string $jenis, int $id): void
     {
@@ -163,7 +142,7 @@ class AdminController
             return;
         }
 
-        $admin = AdminAuthMiddleware::getAdmin();
+        $admin = ValidasiLogin::ambilDataAdmin();
         extract(array_merge(['admin' => $admin], $data));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/detail-surat.php';
     }
@@ -173,10 +152,7 @@ class AdminController
     public function showDomisiliDetail(int $id): void { $this->showDetailSurat('domisili', $id); }
 
     /**
-     * Arsipkan permohonan manual
-     * BUG FIX: Parameter $type dan $id berasal dari URL (route param), bukan $_POST
-     * Route: POST /admin/surat/{type}/{id}/archive → dipanggil AdminLaporanController
-     * Method ini tidak dipanggil lagi lewat route, tapi tetap tersedia jika dibutuhkan
+     * Memasukkan data ke tabel arsip
      */
     public function archivePermohonan(string $type, int $id): void
     {
@@ -197,15 +173,13 @@ class AdminController
     }
 
     /**
-     * Auto archive permohonan lama (>15 hari, status Selesai/Ditolak)
-     * BUG FIX: Method ini dipanggil route POST /admin/run-auto-archive
-     * bukan dari AdminLaporanController (yang punya sendiri)
+     * Proses otomatis pemindahan data lama ke arsip
      */
     public function runAutoArchive(): void
     {
         $count = $this->permohonanService->autoArchiveOldPermohonan();
         $_SESSION['success'] = "Berhasil mengarsipkan {$count} permohonan lama.";
-        header('Location: /admin/laporan');
+        header('Location: /web-pengajuan/admin/laporan');
         exit;
     }
 }
