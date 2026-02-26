@@ -7,15 +7,17 @@ require_once ROOT_PATH . '/data_tier/models/BaseModel.php';
 require_once ROOT_PATH . '/data_tier/models/PermohonanDomisili.php';
 require_once ROOT_PATH . '/data_tier/models/PermohonanKtm.php';
 require_once ROOT_PATH . '/data_tier/models/PermohonanSKU.php';
-require_once ROOT_PATH . '/data_tier/repositories/BaseRepository.php';
-require_once ROOT_PATH . '/data_tier/repositories/PermohonanDomisiliRepository.php';
-require_once ROOT_PATH . '/data_tier/repositories/PermohonanKTMRepository.php';
-require_once ROOT_PATH . '/data_tier/repositories/PermohonanSKURepository.php';
-require_once __DIR__ . '/ApiResponse.php';
-require_once __DIR__ . '/ApiAuth.php';
-require_once __DIR__ . '/controllers/PermohonanApiController.php';
-require_once __DIR__ . '/controllers/RiwayatApiController.php';
-require_once __DIR__ . '/controllers/NotificationApiController.php';
+require_once ROOT_PATH . '/logic_tier/repositories/BaseRepository.php';
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanDomisiliRepository.php';
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanKTMRepository.php';
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanSKURepository.php';
+
+// ── Dipindah ke logic_tier ──
+require_once ROOT_PATH . '/logic_tier/services/ApiResponse.php';
+require_once ROOT_PATH . '/logic_tier/keamanan/ApiAuth.php';
+require_once ROOT_PATH . '/logic_tier/controllers/api/PermohonanApiController.php';
+require_once ROOT_PATH . '/logic_tier/controllers/api/RiwayatApiController.php';
+require_once ROOT_PATH . '/logic_tier/controllers/api/NotificationApiController.php';
 
 // ── CORS & Headers ──
 header('Content-Type: application/json; charset=UTF-8');

@@ -5,7 +5,8 @@ $baseDir = __DIR__;
 $categories = [
     'Controllers'  => ['path' => 'logic_tier/controllers',  'ext' => 'php'],
     'Services'     => ['path' => 'logic_tier/services',     'ext' => 'php'],
-    'Repositories' => ['path' => 'data_tier/repositories',  'ext' => 'php'],
+    'Repositories' => ['path' => 'logic_tier/repositories',  'ext' => 'php'],
+    'Models'       => ['path' => 'data_tier/models',       'ext' => 'php'],
     'Config'       => ['path' => 'data_tier/config',        'ext' => 'php'],
     'Views'        => ['path' => 'presentation_tier',       'ext' => 'php'],
     'CSS'          => ['path' => 'presentation_tier/css',   'ext' => 'css'],

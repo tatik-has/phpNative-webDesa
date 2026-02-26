@@ -5,6 +5,18 @@ class SuratTemplateService
     private string $logoPath = '/web-pengajuan/images/logo.png';
     private string $ttdPath  = '/web-pengajuan/assets/img/ttd-kepala-desa.png';
 
+    private function imgToBase64(string $webPath): string
+    {
+        $absPath = $_SERVER['DOCUMENT_ROOT'] . $webPath;
+        if (!file_exists($absPath)) return '';
+
+        $ext      = strtolower(pathinfo($absPath, PATHINFO_EXTENSION));
+        $mime     = $ext === 'png' ? 'image/png' : 'image/jpeg';
+        $data     = base64_encode(file_get_contents($absPath));
+
+        return "data:{$mime};base64,{$data}";
+    }
+
     public function generateTemplate(string $type, array $permohonan): string
     {
         return match ($type) {
@@ -162,22 +174,30 @@ class SuratTemplateService
 
     private function headerKop(): string
     {
+        $logoBase64 = $this->imgToBase64($this->logoPath);
+        $logoTag    = $logoBase64
+            ? "<img src='{$logoBase64}' alt='Logo' class='logo-desa'>"
+            : "<div style='width:80px;height:80px;'></div>"; // fallback kosong
+
         return "
-        <div class='kop-surat'>
-            <div class='kop-logo'>
-                <img src='{$this->logoPath}' alt='Logo' class='logo-desa'>
-            </div>
-            <div class='kop-teks'>
-                <p class='kop-provinsi'>PEMERINTAH KABUPATEN BENGKALIS</p>
-                <p class='kop-kecamatan'>KECAMATAN BUKIT BATU</p>
-                <p class='kop-desa'>KANTOR DESA PAKNING ASAL</p>
-                <p class='kop-alamat'>Jl. Sukajadi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kode Pos 28761</p>
-                <p class='kop-alamat'>Email: Pakningasal36@gmail.com, website pemdespakningasal.com</p>
-            </div>
+    <div class='kop-surat'>
+        <div class='kop-logo'>
+            {$logoTag}
         </div>
-        <hr class='garis-kop-atas'>
-        <hr class='garis-kop-bawah'>
-        ";
+        <div class='kop-teks'>
+            <p class='kop-provinsi'>PEMERINTAH KABUPATEN BENGKALIS</p>
+            <p class='kop-kecamatan'>KECAMATAN BUKIT BATU</p>
+            <p class='kop-desa'>KANTOR DESA PAKNING ASAL</p>
+            <div class='kop-alamat-row'>
+                <span>Jl. Sukajadi</span>
+                <span>Kode Pos 28761</span>
+            </div>
+            <p class='kop-alamat'>Email: Pakningasal36@gmail.com, website pemdespakningasal.com</p>
+        </div>
+    </div>
+    <hr class='garis-kop-atas'>
+    <hr class='garis-kop-bawah'>
+    ";
     }
 
     /**
@@ -186,37 +206,35 @@ class SuratTemplateService
      */
     private function blockTtd(string $tanggal): string
     {
-        $ttdAbsPath = $_SERVER['DOCUMENT_ROOT'] . $this->ttdPath;
-        $config     = $this->getKadesConfig();
-        $namaKades  = $config['nama_kades'] ?? '';
-        $nipKades   = $config['nip_kades']  ?? '';
+        $config    = $this->getKadesConfig();
+        $namaKades = $config['nama_kades'] ?? '';
+        $nipKades  = $config['nip_kades']  ?? '';
 
-        // Gambar TTD
-        if (file_exists($ttdAbsPath)) {
-            $ttdImg = "<img src='{$this->ttdPath}?v=" . time() . "' alt='Tanda Tangan' class='ttd-img'>";
+        // Convert TTD ke base64 agar muncul saat di-download
+        $ttdBase64 = $this->imgToBase64($this->ttdPath);
+        if ($ttdBase64) {
+            $ttdImg = "<img src='{$ttdBase64}' alt='Tanda Tangan' class='ttd-img'>";
         } else {
             $ttdImg = "<div class='ttd-placeholder'><small style='color:#aaa;font-size:9pt;'>[TTD Kepala Desa]</small></div>";
         }
 
-        // Nama
         $namaTampil = !empty($namaKades)
             ? "<p><strong>" . htmlspecialchars($namaKades) . "</strong></p>"
             : "<p><strong>_______________________</strong></p>";
 
-        // FIX: NIP hanya tampil jika ada isinya
         $nipTampil = !empty($nipKades)
             ? "<p>NIP. " . htmlspecialchars($nipKades) . "</p>"
             : '';
 
         return "
-        <div class='ttd-surat'>
-            <p>{$tanggal}</p>
-            <p>Kepala Desa Pakning Asal,</p>
-            <div class='spasi-ttd'>{$ttdImg}</div>
-            {$namaTampil}
-            {$nipTampil}
-        </div>
-        ";
+    <div class='ttd-surat'>
+        <p>{$tanggal}</p>
+        <p>Kepala Desa Pakning Asal,</p>
+        <div class='spasi-ttd'>{$ttdImg}</div>
+        {$namaTampil}
+        {$nipTampil}
+    </div>
+    ";
     }
 
     /**
@@ -279,9 +297,18 @@ class SuratTemplateService
                 text-transform: uppercase;
                 margin: 2px 0;
             }
+           /* Ganti baris kop-alamat yang pakai &nbsp; dengan ini */
+            .kop-alamat-row {
+                display: flex;
+                justify-content: space-between;
+                font-size: 9pt;
+                margin: 1px 0;
+                padding: 0 20px;
+            }
             .kop-alamat {
                 font-size: 9pt;
                 margin: 1px 0;
+                text-align: center;
             }
             .garis-kop-atas {
                 border: 2.5px solid #000;
@@ -372,10 +399,18 @@ class SuratTemplateService
     private function formatTanggal(string $date): string
     {
         $bulan = [
-            '01' => 'Januari',  '02' => 'Februari', '03' => 'Maret',
-            '04' => 'April',    '05' => 'Mei',       '06' => 'Juni',
-            '07' => 'Juli',     '08' => 'Agustus',   '09' => 'September',
-            '10' => 'Oktober',  '11' => 'November',  '12' => 'Desember',
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember',
         ];
         [$y, $m, $d] = explode('-', $date);
         return "Pakning Asal, {$d} {$bulan[$m]} {$y}";

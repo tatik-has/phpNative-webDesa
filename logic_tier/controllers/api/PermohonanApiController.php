@@ -1,5 +1,11 @@
 <?php
 
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanDomisiliRepository.php';
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanKTMRepository.php';
+require_once ROOT_PATH . '/logic_tier/repositories/PermohonanSKURepository.php';
+require_once ROOT_PATH . '/logic_tier/keamanan/ApiAuth.php';
+require_once ROOT_PATH . '/logic_tier/services/ApiResponse.php';
+
 class PermohonanApiController
 {
     private PermohonanDomisiliRepository $domisiliRepo;

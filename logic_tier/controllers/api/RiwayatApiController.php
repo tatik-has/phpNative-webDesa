@@ -1,5 +1,8 @@
 <?php
 
+require_once ROOT_PATH . '/logic_tier/keamanan/ApiAuth.php';
+require_once ROOT_PATH . '/logic_tier/services/ApiResponse.php';
+
 class RiwayatApiController
 {
     private PDO $db;
@@ -41,9 +44,9 @@ class RiwayatApiController
     private function getRiwayatByNik(string $nik): array
     {
         $tables = [
-            'permohonan_domisili' => ['label' => 'Surat Keterangan Domisili', 'type' => 'domisili'],
+            'permohonan_domisili' => ['label' => 'Surat Keterangan Domisili',            'type' => 'domisili'],
             'permohonan_ktm'      => ['label' => 'Surat Keterangan Tidak Mampu (SKTM)', 'type' => 'ktm'],
-            'permohonan_sku'      => ['label' => 'Surat Keterangan Usaha (SKU)', 'type' => 'sku'],
+            'permohonan_sku'      => ['label' => 'Surat Keterangan Usaha (SKU)',         'type' => 'sku'],
         ];
 
         $all = [];

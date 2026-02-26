@@ -1,5 +1,8 @@
 <?php
 
+require_once ROOT_PATH . '/logic_tier/keamanan/ApiAuth.php';
+require_once ROOT_PATH . '/logic_tier/services/ApiResponse.php';
+
 class NotificationApiController
 {
     private PDO $db;
