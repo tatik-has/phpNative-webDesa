@@ -12,13 +12,26 @@ class SKUController
         $this->skuService = new SuratSkuService();
     }
 
+    // [BARU] Cek login NIK — redirect ke halaman login jika belum login
+    private function cekLogin(): void
+    {
+        if (empty($_SESSION['nik_pemohon'])) {
+            $_SESSION['error'] = 'Anda harus login terlebih dahulu untuk mengajukan surat.';
+            header('Location: /web-pengajuan/login');
+            exit;
+        }
+    }
+
     public function create(): void
     {
+        $this->cekLogin(); // [BARU]
         require_once __DIR__ . '/../../../presentation_tier/masyarakat/permohonan/usaha.php';
     }
 
     public function store(): void
     {
+        $this->cekLogin(); // [BARU]
+
         $errors = $this->validateSku($_POST, $_FILES);
 
         if (!empty($errors)) {
@@ -39,9 +52,6 @@ class SKUController
             $this->skuService->storeSku($_POST, $files);
 
             unset($_SESSION['errors'], $_SESSION['old_input']);
-
-            // Simpan NIK ke session untuk cek notifikasi (tanpa login)
-            $_SESSION['nik_pemohon'] = $_POST['nik'];
 
             $_SESSION['success'] = 'Pengajuan Surat Keterangan Usaha berhasil diajukan! Admin akan segera memproses permohonan Anda.';
             header('Location: /web-pengajuan/dashboard');

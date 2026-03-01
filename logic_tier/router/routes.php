@@ -10,6 +10,7 @@ require_once __DIR__ . '/../controllers/admin/AdminDashboardController.php';
 require_once __DIR__ . '/../controllers/admin/AdminLaporanController.php';
 require_once __DIR__ . '/../controllers/admin/AdminProfileController.php';
 require_once __DIR__ . '/../controllers/admin/AdminPengaturanController.php'; 
+require_once __DIR__ . '/../controllers/admin/AdminNikController.php';
 
 // ── Controllers Masyarakat ──
 require_once __DIR__ . '/../controllers/masyarakat/MasyarakatDashboardController.php';
@@ -19,6 +20,8 @@ require_once __DIR__ . '/../controllers/masyarakat/SKTMController.php';
 require_once __DIR__ . '/../controllers/masyarakat/SKUController.php';
 require_once __DIR__ . '/../controllers/masyarakat/RiwayatSuratController.php';
 require_once __DIR__ . '/../controllers/masyarakat/MasyarakatNotificationController.php';
+require_once __DIR__ . '/../controllers/masyarakat/MasyarakatAuthController.php';
+
 
 // ── Controllers Shared ──
 require_once __DIR__ . '/../controllers/shared/NotificationController.php';
@@ -40,6 +43,11 @@ Router::get('/faq', function () {
     require_once __DIR__ . '/../../presentation_tier/masyarakat/faq/faq.php';
 });
 
+Router::get('/login',  [MasyarakatAuthController::class, 'showLogin']);
+Router::post('/login', [MasyarakatAuthController::class, 'login']);
+Router::post('/logout',[MasyarakatAuthController::class, 'logout']);
+
+
 // Pengajuan surat
 Router::get('/pengajuan',          [PengajuanSuratController::class, 'showPengajuanForm']);
 Router::get('/pengajuan/domisili', [DomisiliController::class, 'showForm']);
@@ -53,6 +61,7 @@ Router::post('/pengajuan/sku',    [SKUController::class, 'store']);
 Router::get('/notifications',                [MasyarakatNotificationController::class, 'index']);
 Router::delete('/notifications/delete-all',  [MasyarakatNotificationController::class, 'deleteAll']);
 Router::delete('/notifications/{id}/delete', [MasyarakatNotificationController::class, 'delete']);
+
 
 // ============================================================
 // ADMIN — LOGIN (publik)
@@ -99,3 +108,10 @@ Router::post('/admin/notifications/mark-as-read', [NotificationController::class
 Router::get('/admin/pengaturan/ttd',          [AdminPengaturanController::class, 'showTtdPage']);
 Router::post('/admin/pengaturan/ttd/upload',  [AdminPengaturanController::class, 'uploadTtd']);
 Router::post('/admin/pengaturan/ttd/nama',    [AdminPengaturanController::class, 'simpanNamaKades']);
+
+// Kelola NIK Warga
+Router::get('/admin/nik',                        [AdminNikController::class, 'index']);
+Router::post('/admin/nik/store',                 [AdminNikController::class, 'store']);
+Router::post('/admin/nik/import',                [AdminNikController::class, 'importExcel']);
+Router::get('/admin/nik/template',               [AdminNikController::class, 'downloadTemplate']);
+Router::delete('/admin/nik/{id}/delete',         [AdminNikController::class, 'destroy']);

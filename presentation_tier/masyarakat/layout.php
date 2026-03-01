@@ -15,6 +15,81 @@
     <?php foreach ($extraCss ?? [] as $css): ?>
         <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
     <?php endforeach; ?>
+
+    <!-- [BARU] Style untuk tombol login/logout di navbar -->
+    <style>
+        .btn-nav-login {
+            background: rgba(255,255,255,.15) !important;
+            border: 1.5px solid rgba(255,255,255,.4) !important;
+            border-radius: 8px !important;
+            padding: 7px 14px !important;
+            color: #fff !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            transition: background .2s !important;
+            text-decoration: none !important;
+        }
+        .btn-nav-login:hover { background: rgba(255,255,255,.25) !important; }
+
+        .nav-user-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,.1);
+            border-radius: 8px;
+            padding: 4px 6px 4px 12px;
+            border: 1px solid rgba(255,255,255,.2);
+        }
+        .nav-user-name {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .btn-nav-logout {
+            background: rgba(231,76,60,.8);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background .2s;
+            font-family: inherit;
+        }
+        .btn-nav-logout:hover { background: #e74c3c; }
+
+        @media (max-width: 767px) {
+            .nav-user-info {
+                width: 100%;
+                justify-content: space-between;
+                border-radius: 10px;
+                padding: 10px 14px;
+                margin-top: 4px;
+            }
+            .nav-user-name { max-width: none; }
+            .btn-nav-login {
+                width: 100% !important;
+                justify-content: center !important;
+                margin-top: 4px !important;
+                padding: 11px 14px !important;
+            }
+            .btn-nav-logout { padding: 8px 14px; font-size: 13px; }
+        }
+    </style>
 </head>
 
 <body>
@@ -124,6 +199,30 @@
                class="<?= str_contains($currentPath, '/faq') ? 'active' : '' ?>">
                 <i class="fas fa-question-circle"></i><span class="menu-text">FAQ</span>
             </a>
+
+            <!-- [BARU] LOGIN / PROFIL WARGA -->
+            <?php if (!empty($_SESSION['nik_pemohon'])): ?>
+                <div class="nav-user-info">
+                    <span class="nav-user-name">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="menu-text">
+                            <?= htmlspecialchars($_SESSION['nama_pemohon'] ?? 'Warga') ?>
+                        </span>
+                    </span>
+                    <form method="POST" action="/web-pengajuan/logout" style="display:inline;">
+                        <button type="submit" class="btn-nav-logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span class="menu-text">Keluar</span>
+                        </button>
+                    </form>
+                </div>
+            <?php else: ?>
+                <a href="/web-pengajuan/login"
+                   class="btn-nav-login <?= isActiveNav('/web-pengajuan/login') ?>">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span class="menu-text">Masuk</span>
+                </a>
+            <?php endif; ?>
         </div>
     </nav>
 

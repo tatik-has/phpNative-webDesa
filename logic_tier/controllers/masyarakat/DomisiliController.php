@@ -12,16 +12,29 @@ class DomisiliController
         $this->domisiliService = new SuratDomisiliService();
     }
 
+    // [BARU] Cek login NIK — redirect ke halaman login jika belum login
+    private function cekLogin(): void
+    {
+        if (empty($_SESSION['nik_pemohon'])) {
+            $_SESSION['error'] = 'Anda harus login terlebih dahulu untuk mengajukan surat.';
+            header('Location: /web-pengajuan/login');
+            exit;
+        }
+    }
+
     /**
      * Tampilkan form pengajuan domisili
      */
     public function showForm(): void
     {
+        $this->cekLogin(); // [BARU]
         require_once __DIR__ . '/../../../presentation_tier/masyarakat/permohonan/domisili.php';
     }
 
     public function store(): void
     {
+        $this->cekLogin(); // [BARU]
+
         $errors = $this->validateDomisili($_POST, $_FILES);
 
         if (!empty($errors)) {
@@ -34,9 +47,6 @@ class DomisiliController
         try {
             $this->domisiliService->storeDomisili($_POST, $_FILES['ktp'] ?? null, $_FILES['kk'] ?? null);
 
-            // TAMBAH INI — simpan NIK ke session untuk cek notifikasi
-            $_SESSION['nik_pemohon'] = $_POST['nik'];
-
             $_SESSION['success'] = 'Pengajuan berhasil diajukan!';
             header('Location: /web-pengajuan/dashboard');
             exit;
@@ -47,7 +57,6 @@ class DomisiliController
             exit;
         }
     }
-
 
     private function validateDomisili(array $post, array $files): array
     {

@@ -48,8 +48,13 @@
                     class="<?= str_contains($_SERVER['REQUEST_URI'], 'profile') ? 'active' : '' ?>">
                     <i class="fas fa-user"></i> Profil
                 </a>
-                <a href="/web-pengajuan/admin/pengaturan/ttd">
-                    ⚙️ Pengaturan TTD
+                <a href="/web-pengajuan/admin/pengaturan/ttd"
+                    class="<?= str_contains($_SERVER['REQUEST_URI'], 'pengaturan') ? 'active' : '' ?>">
+                    <i class="fas fa-cog"></i> Pengaturan TTD
+                </a>
+                <a href="/web-pengajuan/admin/nik"
+                    class="<?= str_contains($_SERVER['REQUEST_URI'], '/admin/nik') ? 'active' : '' ?>">
+                    <i class="fas fa-id-card"></i> Kelola NIK Warga
                 </a>
             </nav>
 

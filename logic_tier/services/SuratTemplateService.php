@@ -9,11 +9,9 @@ class SuratTemplateService
     {
         $absPath = $_SERVER['DOCUMENT_ROOT'] . $webPath;
         if (!file_exists($absPath)) return '';
-
-        $ext      = strtolower(pathinfo($absPath, PATHINFO_EXTENSION));
-        $mime     = $ext === 'png' ? 'image/png' : 'image/jpeg';
-        $data     = base64_encode(file_get_contents($absPath));
-
+        $ext  = strtolower(pathinfo($absPath, PATHINFO_EXTENSION));
+        $mime = $ext === 'png' ? 'image/png' : 'image/jpeg';
+        $data = base64_encode(file_get_contents($absPath));
         return "data:{$mime};base64,{$data}";
     }
 
@@ -40,35 +38,22 @@ class SuratTemplateService
 
         return $this->wrapSurat("
             " . $this->headerKop() . "
-
             <div class='judul-surat'>
                 <h2>SURAT KETERANGAN DOMISILI</h2>
                 <p>NOMOR: {$nomorSurat}</p>
             </div>
-
             <div class='isi-surat'>
-                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis 
-                dengan ini menerangkan :</p>
-
+                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis dengan ini menerangkan :</p>
                 <table class='tabel-data'>
-                    <tr><td>NAMA</td><td>: <strong>{$nama}</strong></td></tr>
+                    <tr><td>NAMA</td><td>: {$nama}</td></tr>
                     <tr><td>NIK</td><td>: {$nik}</td></tr>
                     <tr><td>JENIS KELAMIN</td><td>: {$jk}</td></tr>
                     <tr><td>ALAMAT KTP</td><td>: {$alamatKtp}</td></tr>
                     <tr><td>ALAMAT DOMISILI</td><td>: {$alamat}, {$rtRw}</td></tr>
                 </table>
-
-                <p class='paragraf' style='margin-top: 20px;'>
-                    Adalah benar-benar warga yang berdomisili di wilayah Desa Pakning Asal 
-                    sebagaimana alamat yang tertera di atas.
-                </p>
-
-                <p class='paragraf'>
-                    Demikianlah Surat Keterangan Domisili ini dibuat dengan sebenarnya untuk 
-                    dapat dipergunakan sebagaimana mestinya.
-                </p>
+                <p class='paragraf' style='margin-top: 20px;'>Adalah benar-benar warga yang berdomisili di wilayah Desa Pakning Asal sebagaimana alamat yang tertera di atas.</p>
+                <p class='paragraf'>Demikianlah Surat Keterangan Domisili ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
             </div>
-
             " . $this->blockTtd($tanggal) . "
         ");
     }
@@ -87,18 +72,14 @@ class SuratTemplateService
 
         return $this->wrapSurat("
             " . $this->headerKop() . "
-
             <div class='judul-surat'>
                 <h2>SURAT KETERANGAN TIDAK MAMPU</h2>
                 <p>NOMOR: {$nomorSurat}</p>
             </div>
-
             <div class='isi-surat'>
-                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis 
-                dengan ini menerangkan :</p>
-
+                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis dengan ini menerangkan :</p>
                 <table class='tabel-data'>
-                    <tr><td>NAMA</td><td>: <strong>{$nama}</strong></td></tr>
+                    <tr><td>NAMA</td><td>: {$nama}</td></tr>
                     <tr><td>NIK</td><td>: {$nik}</td></tr>
                     <tr><td>JENIS KELAMIN</td><td>: {$jk}</td></tr>
                     <tr><td>ALAMAT</td><td>: {$alamat}</td></tr>
@@ -106,18 +87,9 @@ class SuratTemplateService
                     <tr><td>JUMLAH TANGGUNGAN</td><td>: {$tanggungan} orang</td></tr>
                     <tr><td>KEPERLUAN</td><td>: {$keperluan}</td></tr>
                 </table>
-
-                <p class='paragraf' style='margin-top: 20px;'>
-                    Adalah benar-benar tergolong keluarga tidak mampu dan memerlukan bantuan 
-                    untuk keperluan <strong>{$keperluan}</strong>.
-                </p>
-
-                <p class='paragraf'>
-                    Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan 
-                    sebagaimana mestinya.
-                </p>
+                <p class='paragraf' style='margin-top: 20px;'>Adalah benar-benar tergolong keluarga tidak mampu dan memerlukan bantuan untuk keperluan {$keperluan}.</p>
+                <p class='paragraf'>Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
             </div>
-
             " . $this->blockTtd($tanggal) . "
         ");
     }
@@ -136,38 +108,24 @@ class SuratTemplateService
 
         return $this->wrapSurat("
             " . $this->headerKop() . "
-
             <div class='judul-surat'>
                 <h2>SURAT KETERANGAN USAHA</h2>
                 <p>NOMOR: {$nomorSurat}</p>
             </div>
-
             <div class='isi-surat'>
-                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis 
-                dengan ini menerangkan :</p>
-
+                <p class='paragraf'>Kepala Desa Pakning Asal Kecamatan Bukit Batu Kabupaten Bengkalis dengan ini menerangkan :</p>
                 <table class='tabel-data'>
-                    <tr><td>NAMA</td><td>: <strong>{$nama}</strong></td></tr>
+                    <tr><td>NAMA</td><td>: {$nama}</td></tr>
                     <tr><td>NIK</td><td>: {$nik}</td></tr>
                     <tr><td>ALAMAT</td><td>: {$alamatKtp}</td></tr>
-                    <tr><td>NAMA USAHA</td><td>: <strong>{$namaUsaha}</strong></td></tr>
+                    <tr><td>NAMA USAHA</td><td>: {$namaUsaha}</td></tr>
                     <tr><td>JENIS USAHA</td><td>: {$jenisUsaha}</td></tr>
                     <tr><td>ALAMAT USAHA</td><td>: {$alamatUsaha}</td></tr>
                     <tr><td>LAMA USAHA</td><td>: {$lamaUsaha}</td></tr>
                 </table>
-
-                <p class='paragraf' style='margin-top: 20px;'>
-                    Adalah benar-benar menjalankan usaha <strong>{$jenisUsaha}</strong> dengan nama 
-                    usaha <strong>{$namaUsaha}</strong> yang berlokasi di {$alamatUsaha} dan telah 
-                    berjalan selama {$lamaUsaha}.
-                </p>
-
-                <p class='paragraf'>
-                    Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan 
-                    sebagaimana mestinya.
-                </p>
+                <p class='paragraf' style='margin-top: 20px;'>Adalah benar-benar menjalankan usaha {$jenisUsaha} dengan nama usaha {$namaUsaha} yang berlokasi di {$alamatUsaha} dan telah berjalan selama {$lamaUsaha}.</p>
+                <p class='paragraf'>Demikian surat keterangan ini dibuat dengan sebenarnya untuk dapat dipergunakan sebagaimana mestinya.</p>
             </div>
-
             " . $this->blockTtd($tanggal) . "
         ");
     }
@@ -177,13 +135,11 @@ class SuratTemplateService
         $logoBase64 = $this->imgToBase64($this->logoPath);
         $logoTag    = $logoBase64
             ? "<img src='{$logoBase64}' alt='Logo' class='logo-desa'>"
-            : "<div style='width:80px;height:80px;'></div>"; // fallback kosong
+            : "<div style='width:80px;height:80px;'></div>";
 
         return "
     <div class='kop-surat'>
-        <div class='kop-logo'>
-            {$logoTag}
-        </div>
+        <div class='kop-logo'>{$logoTag}</div>
         <div class='kop-teks'>
             <p class='kop-provinsi'>PEMERINTAH KABUPATEN BENGKALIS</p>
             <p class='kop-kecamatan'>KECAMATAN BUKIT BATU</p>
@@ -200,27 +156,20 @@ class SuratTemplateService
     ";
     }
 
-    /**
-     * FIX: Baca nama_kades DAN nip_kades dari kades.json
-     * NIP ditampilkan jika ada, jika kosong baris NIP tidak muncul
-     */
     private function blockTtd(string $tanggal): string
     {
         $config    = $this->getKadesConfig();
         $namaKades = $config['nama_kades'] ?? '';
         $nipKades  = $config['nip_kades']  ?? '';
 
-        // Convert TTD ke base64 agar muncul saat di-download
         $ttdBase64 = $this->imgToBase64($this->ttdPath);
-        if ($ttdBase64) {
-            $ttdImg = "<img src='{$ttdBase64}' alt='Tanda Tangan' class='ttd-img'>";
-        } else {
-            $ttdImg = "<div class='ttd-placeholder'><small style='color:#aaa;font-size:9pt;'>[TTD Kepala Desa]</small></div>";
-        }
+        $ttdImg    = $ttdBase64
+            ? "<img src='{$ttdBase64}' alt='Tanda Tangan' class='ttd-img'>"
+            : "<div class='ttd-placeholder'><small style='color:#aaa;font-size:9pt;'>[TTD Kepala Desa]</small></div>";
 
         $namaTampil = !empty($namaKades)
-            ? "<p><strong>" . htmlspecialchars($namaKades) . "</strong></p>"
-            : "<p><strong>_______________________</strong></p>";
+            ? "<p>" . htmlspecialchars($namaKades) . "</p>"
+            : "<p>_______________________</p>";
 
         $nipTampil = !empty($nipKades)
             ? "<p>NIP. " . htmlspecialchars($nipKades) . "</p>"
@@ -237,10 +186,6 @@ class SuratTemplateService
     ";
     }
 
-    /**
-     * FIX: Diganti dari getNamaKades() menjadi getKadesConfig()
-     * agar bisa ambil nama_kades DAN nip_kades sekaligus
-     */
     private function getKadesConfig(): array
     {
         $configFile = $_SERVER['DOCUMENT_ROOT'] . '/web-pengajuan/data_tier/config/kades.json';
@@ -297,13 +242,12 @@ class SuratTemplateService
                 text-transform: uppercase;
                 margin: 2px 0;
             }
-           /* Ganti baris kop-alamat yang pakai &nbsp; dengan ini */
             .kop-alamat-row {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
+                gap: 40px;
                 font-size: 9pt;
                 margin: 1px 0;
-                padding: 0 20px;
             }
             .kop-alamat {
                 font-size: 9pt;
@@ -324,6 +268,7 @@ class SuratTemplateService
             }
             .judul-surat h2 {
                 font-size: 13pt;
+                font-weight: bold;
                 text-decoration: underline;
                 text-transform: uppercase;
                 margin-bottom: 4px;
@@ -331,6 +276,7 @@ class SuratTemplateService
             .judul-surat p {
                 margin: 0;
                 font-size: 12pt;
+                font-weight: normal;
                 letter-spacing: 1px;
             }
             .isi-surat {
@@ -340,6 +286,7 @@ class SuratTemplateService
                 text-align: justify;
                 text-indent: 40px;
                 margin: 10px 0;
+                font-weight: normal;
             }
             .tabel-data {
                 width: 90%;
@@ -350,6 +297,7 @@ class SuratTemplateService
                 padding: 3px 6px;
                 vertical-align: top;
                 font-size: 12pt;
+                font-weight: normal;
             }
             .tabel-data td:first-child {
                 width: 200px;
@@ -361,9 +309,11 @@ class SuratTemplateService
                 float: right;
                 width: 220px;
                 margin-right: 10px;
+                font-weight: normal;
             }
             .ttd-surat p {
                 margin: 2px 0;
+                font-weight: normal;
             }
             .spasi-ttd {
                 height: 80px;
@@ -399,18 +349,10 @@ class SuratTemplateService
     private function formatTanggal(string $date): string
     {
         $bulan = [
-            '01' => 'Januari',
-            '02' => 'Februari',
-            '03' => 'Maret',
-            '04' => 'April',
-            '05' => 'Mei',
-            '06' => 'Juni',
-            '07' => 'Juli',
-            '08' => 'Agustus',
-            '09' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Desember',
+            '01' => 'Januari',  '02' => 'Februari', '03' => 'Maret',
+            '04' => 'April',    '05' => 'Mei',       '06' => 'Juni',
+            '07' => 'Juli',     '08' => 'Agustus',   '09' => 'September',
+            '10' => 'Oktober',  '11' => 'November',  '12' => 'Desember',
         ];
         [$y, $m, $d] = explode('-', $date);
         return "Pakning Asal, {$d} {$bulan[$m]} {$y}";
