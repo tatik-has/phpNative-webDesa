@@ -66,7 +66,6 @@ ob_start();
     .btn-primary { background: #3498db; color: #fff; }
     .btn-success { background: #27ae60; color: #fff; }
     .btn-danger  { background: #e74c3c; color: #fff; padding: 6px 12px; font-size: 12px; }
-    .btn-outline { background: transparent; color: #3498db; border: 1px solid #3498db; }
     .btn-sm      { padding: 5px 10px; font-size: 11px; }
     .btn-full    { width: 100%; justify-content: center; }
 
@@ -106,7 +105,7 @@ ob_start();
     .alert-danger   { background: #fdedec; color: #c0392b; border: 1px solid #f5b7b1; }
 
     .file-selected-name { font-size: 12px; color: #27ae60; margin-top: 6px; font-weight: 600; }
-    
+
     .table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto; }
     .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
     .table-wrap::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
@@ -186,23 +185,11 @@ ob_start();
                     </div>
                 </div>
                 <div class="card-box-body">
-
-                    <div style="margin-bottom:14px;padding:12px;background:#fffbea;border:1px solid #f9e4a0;border-radius:8px;font-size:12px;color:#7d6608;">
-                        <strong><i class="fas fa-info-circle"></i> Format File:</strong><br>
-                        Kolom A = NIK (16 digit), Kolom B = Nama Lengkap<br>
-                        Baris pertama boleh berisi header (akan dilewati otomatis).
-                        <div style="margin-top:8px;">
-                            <a href="/web-pengajuan/admin/nik/template" class="btn btn-outline btn-sm">
-                                <i class="fas fa-download"></i> Download Template
-                            </a>
-                        </div>
-                    </div>
-
                     <form action="/web-pengajuan/admin/nik/import" method="POST" enctype="multipart/form-data" id="formImport">
                         <div class="import-area" id="importArea" onclick="document.getElementById('file_excel').click()">
                             <div class="icon-upload"><i class="fas fa-cloud-upload-alt"></i></div>
                             <strong>Klik atau drag & drop file di sini</strong>
-                            <p>Format: .xlsx, .xls, atau .csv — Maks 5MB</p>
+                            <p>Format: .xlsx, .xls, atau .csv</p>
                             <p id="namaFile" class="file-selected-name" style="display:none;"></p>
                         </div>
                         <input type="file"

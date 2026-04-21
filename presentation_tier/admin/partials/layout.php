@@ -36,26 +36,27 @@
                     class="<?= (str_contains($_SERVER['REQUEST_URI'], '/surat') || str_contains($_SERVER['REQUEST_URI'], 'domisili') || str_contains($_SERVER['REQUEST_URI'], 'sku') || str_contains($_SERVER['REQUEST_URI'], 'ktm')) ? 'active' : '' ?>">
                     <i class="fas fa-inbox"></i> Permohonan Surat
                 </a>
-                <a href="/web-pengajuan/admin/laporan"
-                    class="<?= str_contains($_SERVER['REQUEST_URI'], 'laporan') ? 'active' : '' ?>">
-                    <i class="fas fa-chart-line"></i> Laporan
+                <a href="/web-pengajuan/admin/nik"
+                    class="<?= str_contains($_SERVER['REQUEST_URI'], '/admin/nik') ? 'active' : '' ?>">
+                    <i class="fas fa-id-card"></i> Validasi NIK Warga
                 </a>
                 <a href="/web-pengajuan/admin/arsip"
                     class="<?= str_contains($_SERVER['REQUEST_URI'], 'arsip') ? 'active' : '' ?>">
                     <i class="fas fa-archive"></i> Arsip
                 </a>
-                <a href="/web-pengajuan/admin/profile"
-                    class="<?= str_contains($_SERVER['REQUEST_URI'], 'profile') ? 'active' : '' ?>">
-                    <i class="fas fa-user"></i> Profil
+                <a href="/web-pengajuan/admin/laporan"
+                    class="<?= str_contains($_SERVER['REQUEST_URI'], 'laporan') ? 'active' : '' ?>">
+                    <i class="fas fa-chart-line"></i> Laporan
                 </a>
                 <a href="/web-pengajuan/admin/pengaturan/ttd"
                     class="<?= str_contains($_SERVER['REQUEST_URI'], 'pengaturan') ? 'active' : '' ?>">
                     <i class="fas fa-cog"></i> Pengaturan TTD
                 </a>
-                <a href="/web-pengajuan/admin/nik"
-                    class="<?= str_contains($_SERVER['REQUEST_URI'], '/admin/nik') ? 'active' : '' ?>">
-                    <i class="fas fa-id-card"></i> Kelola NIK Warga
+                <a href="/web-pengajuan/admin/profile"
+                    class="<?= str_contains($_SERVER['REQUEST_URI'], 'profile') ? 'active' : '' ?>">
+                    <i class="fas fa-user"></i> Profil
                 </a>
+                
             </nav>
 
             <div class="sidebar-logout">

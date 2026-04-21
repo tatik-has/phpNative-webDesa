@@ -2,8 +2,6 @@
 
 /**
  * SISTEM LOGIKA - Controller Kelola NIK Warga
- * Admin dapat menambah NIK + nama warga satu per satu atau via import Excel.
- * Warga yang NIK-nya terdaftar bisa langsung login tanpa registrasi.
  */
 
 require_once __DIR__ . '/../../keamanan/ValidasiLogin.php';
@@ -19,21 +17,15 @@ class AdminNikController
         $this->nikService = new AdminNikService();
     }
 
-    /**
-     * Tampilkan halaman kelola NIK warga
-     */
     public function index(): void
     {
-        $admin    = ValidasiLogin::ambilDataAdmin();
+        $admin     = ValidasiLogin::ambilDataAdmin();
         $daftarNik = $this->nikService->getDaftarWarga();
 
         extract(compact('admin', 'daftarNik'));
         require_once __DIR__ . '/../../../presentation_tier/admin/nik/kelola-nik.php';
     }
 
-    /**
-     * Tambah satu NIK + nama warga secara manual
-     */
     public function store(): void
     {
         $nik  = trim($_POST['nik']  ?? '');
@@ -70,21 +62,32 @@ class AdminNikController
         exit;
     }
 
-    /**
-     * Import NIK warga dari file Excel (.xlsx/.xls/.csv)
-     * Format kolom: NIK (kolom A), Nama (kolom B)
-     */
     public function importExcel(): void
     {
-        if (empty($_FILES['file_excel']['tmp_name'])) {
-            $_SESSION['error'] = 'File Excel wajib dipilih.';
+        // Naikkan limit untuk file besar
+        ini_set('memory_limit', '1G');
+        ini_set('max_execution_time', '300');
+
+        // Cek error upload dari PHP
+        $errCode = $_FILES['file_excel']['error'] ?? UPLOAD_ERR_NO_FILE;
+
+        if ($errCode !== UPLOAD_ERR_OK) {
+            $uploadErrors = [
+                UPLOAD_ERR_INI_SIZE   => 'File terlalu besar. Sesuaikan upload_max_filesize di php.ini menjadi 1G.',
+                UPLOAD_ERR_FORM_SIZE  => 'File terlalu besar.',
+                UPLOAD_ERR_PARTIAL    => 'File hanya terupload sebagian. Coba lagi.',
+                UPLOAD_ERR_NO_FILE    => 'File Excel wajib dipilih.',
+                UPLOAD_ERR_NO_TMP_DIR => 'Folder temporary tidak ditemukan.',
+                UPLOAD_ERR_CANT_WRITE => 'Gagal menyimpan file sementara.',
+            ];
+            $_SESSION['error'] = $uploadErrors[$errCode] ?? 'Upload gagal (kode: ' . $errCode . ').';
             header('Location: /web-pengajuan/admin/nik');
             exit;
         }
 
-        $file     = $_FILES['file_excel'];
-        $ext      = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowed  = ['xlsx', 'xls', 'csv'];
+        $file    = $_FILES['file_excel'];
+        $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed = ['xlsx', 'xls', 'csv'];
 
         if (!in_array($ext, $allowed)) {
             $_SESSION['error'] = 'Format file harus .xlsx, .xls, atau .csv.';
@@ -92,8 +95,9 @@ class AdminNikController
             exit;
         }
 
-        if ($file['size'] > 5 * 1024 * 1024) {
-            $_SESSION['error'] = 'Ukuran file maksimal 5MB.';
+        // Maksimal 1GB
+        if ($file['size'] > 1024 * 1024 * 1024) {
+            $_SESSION['error'] = 'Ukuran file maksimal 1GB.';
             header('Location: /web-pengajuan/admin/nik');
             exit;
         }
@@ -104,12 +108,8 @@ class AdminNikController
             $_SESSION['error'] = $result['error'];
         } else {
             $msg = "Import selesai: {$result['berhasil']} data berhasil ditambahkan.";
-            if ($result['duplikat'] > 0) {
-                $msg .= " {$result['duplikat']} data dilewati (NIK sudah terdaftar).";
-            }
-            if ($result['gagal'] > 0) {
-                $msg .= " {$result['gagal']} data gagal (format tidak valid).";
-            }
+            if ($result['duplikat'] > 0) $msg .= " {$result['duplikat']} data dilewati (NIK sudah terdaftar).";
+            if ($result['gagal']    > 0) $msg .= " {$result['gagal']} data gagal (format tidak valid).";
             $_SESSION['success'] = $msg;
         }
 
@@ -117,9 +117,6 @@ class AdminNikController
         exit;
     }
 
-    /**
-     * Hapus satu data warga berdasarkan ID
-     */
     public function destroy(int $id): void
     {
         $result = $this->nikService->hapusWarga($id);
@@ -132,9 +129,6 @@ class AdminNikController
         exit;
     }
 
-    /**
-     * Download template Excel untuk panduan import
-     */
     public function downloadTemplate(): void
     {
         $filename = 'template_import_nik.csv';
@@ -143,7 +137,6 @@ class AdminNikController
         header('Cache-Control: max-age=0');
 
         $output = fopen('php://output', 'w');
-        // BOM untuk Excel agar karakter Indonesia terbaca
         fputs($output, "\xEF\xBB\xBF");
         fputcsv($output, ['NIK', 'Nama']);
         fputcsv($output, ['1234567890123456', 'Contoh Nama Warga']);
