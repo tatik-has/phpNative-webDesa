@@ -132,6 +132,7 @@ class AdminController
 
     /**
      * Detail lengkap permohonan
+     * PERBAIKAN: tambah 'type' => $jenis ke dalam extract agar view bisa deteksi jenis surat
      */
     public function showDetailSurat(string $jenis, int $id): void
     {
@@ -143,7 +144,8 @@ class AdminController
         }
 
         $admin = ValidasiLogin::ambilDataAdmin();
-        extract(array_merge(['admin' => $admin], $data));
+        // PERBAIKAN: tambah 'type' => $jenis agar $type tersedia di view detail-surat.php
+        extract(array_merge(['admin' => $admin, 'type' => $jenis], $data));
         require_once __DIR__ . '/../../../presentation_tier/admin/permohonan/detail-surat.php';
     }
 

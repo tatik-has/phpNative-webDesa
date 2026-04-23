@@ -204,3 +204,9 @@
         justify-content: center;
     }
 }
+@media (max-width: 767px) {
+    .profile-container {
+        margin: 80px auto 20px; /* tambah margin atas agar tidak ketutup navbar */
+        padding: 15px;
+    }
+}

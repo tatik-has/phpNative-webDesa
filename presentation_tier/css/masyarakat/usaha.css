@@ -369,3 +369,16 @@ body {
         padding: 10px 20px;
     }
 }
+/* Tambahkan di domisili.css / ktm.css / usaha.css */
+@media (max-width: 767px) {
+    .navbar {
+        padding: 16px 20px;
+        background: rgba(15, 23, 42, 0.95);
+    }
+    .navbar-right {
+        display: none; /* sembunyikan dulu, atau pakai hamburger dari layout */
+    }
+    .navbar-left img {
+        height: 45px;
+    }
+}

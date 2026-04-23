@@ -358,9 +358,48 @@ class SuratTemplateService
         return "Pakning Asal, {$d} {$bulan[$m]} {$y}";
     }
 
+    // =========================================================
+    //  GENERATE NOMOR SURAT OTOMATIS
+    //  Format: 004/SKD/PA/2026
+    //  - 004  : nomor urut surat selesai tahun ini (per jenis)
+    //  - SKD  : kode jenis surat
+    //  - PA   : singkatan Pakning Asal
+    //  - 2026 : tahun saat ini (otomatis)
+    // =========================================================
     private function generateNomor(string $kode, int $id): string
     {
         $tahun = date('Y');
-        return sprintf('470/%s/PA/%s', $kode, $tahun);
+
+        // Tentukan tabel DB sesuai jenis surat
+        $tabel = match ($kode) {
+            'SKD'  => 'permohonan_domisili',
+            'SKTM' => 'permohonan_ktm',
+            'SKU'  => 'permohonan_sku',
+            default => null,
+        };
+
+        if (!$tabel) {
+            return sprintf('001/%s/PA/%s', $kode, $tahun);
+        }
+
+        $db = Database::getInstance();
+
+        // Hitung surat yang sudah Selesai tahun ini (selain surat ini sendiri)
+        // lalu +1 = nomor urut surat ini
+        $stmt = $db->prepare("
+            SELECT COUNT(*)
+            FROM {$tabel}
+            WHERE status = 'Selesai'
+              AND YEAR(updated_at) = :tahun
+              AND id != :id
+        ");
+        $stmt->execute([':tahun' => $tahun, ':id' => $id]);
+        $sudahSelesai = (int) $stmt->fetchColumn();
+
+        $urutan    = $sudahSelesai + 1;
+        $nomorUrut = str_pad($urutan, 3, '0', STR_PAD_LEFT); // 001, 002, 003, dst
+
+        return sprintf('%s/%s/PA/%s', $nomorUrut, $kode, $tahun);
+        // Contoh: 004/SKD/PA/2026
     }
 }

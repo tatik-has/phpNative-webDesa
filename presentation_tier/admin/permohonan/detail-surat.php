@@ -46,6 +46,7 @@ function renderDocItem(string $url, string $ext, string $label): string {
 
 ob_start();
 
+
 $p         = $permohonan ?? [];
 $jenis     = $jenis_surat ?? '';
 $statusVal = $p['status'] ?? '';
@@ -63,11 +64,10 @@ $statusBadge = match($statusLow) {
 $typeVal = htmlspecialchars($type ?? '');
 $idVal   = $p['id'] ?? '';
 
-// PERBAIKAN 3: pakai str_contains agar cocok dengan nilai dari AdminSuratService
-// 'Keterangan Domisili', 'Keterangan Tidak Mampu (SKTM)', 'Keterangan Usaha (SKU)'
-$isDomisili = str_contains($jenis, 'Domisili');
-$isKTM      = str_contains($jenis, 'Tidak Mampu') || str_contains($jenis, 'SKTM');
-$isSKU      = str_contains($jenis, 'Usaha') || str_contains($jenis, 'SKU');
+$typeCheck  = strtolower(trim($type ?? ''));
+$isDomisili = $typeCheck === 'domisili' || str_contains($jenis, 'Domisili');
+$isKTM      = $typeCheck === 'ktm'      || str_contains($jenis, 'Tidak Mampu') || str_contains(strtolower($jenis), 'sktm');
+$isSKU      = $typeCheck === 'sku'      || str_contains($jenis, 'Usaha')       || str_contains($jenis, 'SKU');
 ?>
 
 <div class="container-detail mt-4">
@@ -222,9 +222,11 @@ $isSKU      = str_contains($jenis, 'Usaha') || str_contains($jenis, 'SKU');
                 <?php if (!empty($p['path_kk'])): ?>
                     <?= renderDocItem(fileUrl($p['path_kk']), fileExt($p['path_kk']), 'Kartu Keluarga') ?>
                 <?php endif; ?>
+                <!-- Disesuaikan: SKTM menyimpan di path_surat_pengantar_rt_rw (dari SuratKtmService::storeKtm) -->
                 <?php if (!empty($p['path_surat_pengantar_rt_rw'])): ?>
                     <?= renderDocItem(fileUrl($p['path_surat_pengantar_rt_rw']), fileExt($p['path_surat_pengantar_rt_rw']), 'Surat Pengantar RT/RW') ?>
                 <?php endif; ?>
+                <!-- Disesuaikan: SKTM menyimpan di path_foto_rumah (dari SuratKtmService::storeKtm) -->
                 <?php if (!empty($p['path_foto_rumah'])): ?>
                     <?= renderDocItem(fileUrl($p['path_foto_rumah']), fileExt($p['path_foto_rumah']), 'Foto Rumah Tampak Depan') ?>
                 <?php endif; ?>

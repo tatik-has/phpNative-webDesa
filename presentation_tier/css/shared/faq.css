@@ -331,3 +331,16 @@ body {
         color: #0056b3;
     }
 }
+/* faq.css - tambahkan */
+@media (max-width: 767px) {
+    .faq-container {
+        padding: 100px 16px 40px;
+    }
+    .faq-container h1 {
+        font-size: 22px;
+    }
+    .faq-question {
+        font-size: 14px;
+        padding: 14px 16px;
+    }
+}

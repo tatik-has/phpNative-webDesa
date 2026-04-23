@@ -116,3 +116,18 @@ body {
     .pengajuan-container { padding: 90px 16px 30px; }
     .pengajuan-title { font-size: 22px; }
 }
+/* Tambahkan ini di pengajuan.css */
+@media (max-width: 1024px) {
+    .card-container {
+        grid-template-columns: repeat(2, 1fr); /* tablet: 2 kolom */
+        max-width: 700px;
+    }
+    .pengajuan-title {
+        font-size: 30px;
+    }
+}
+
+/* Yang sudah ada (biarkan) */
+@media (max-width: 767px) {
+    .card-container { grid-template-columns: 1fr; } /* HP: 1 kolom */
+}
